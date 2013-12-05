@@ -1,16 +1,28 @@
 #!/bin/bash
 
+HOSTAPD_CONF="/etc/hostapd/hostapd.conf"
+SSID_TOKEN={{SSID}}
+HOSTAPD_CONF_TEMPLATE="hostapd.conf.template"
+
+
 if [ "$(id -u)" != "0" ]; then
    echo "Script must be run as root" 1>&2
    exit 1
 fi
 
 
-if [ "$#" -ne 1 ]
+if [ "$#" -ne 2 ]
 then
-	echo "Usage : cmac MAC_ADDRESS"
+	echo "Usage : cmac MAC_ADDRESS SSID"
 	exit 1
 fi
+
+if [ ! -f $HOSTAPD_CONF_TEMPLATE ]
+then
+        echo "hostapd conf template note found $HOSTAPD_CONF_TEMPLATE"
+        exit 1
+fi
+
 
 echo "------------Changing Mac Address---------------"
 echo $1
@@ -18,6 +30,9 @@ ifconfig wlan0 down
 ifconfig wlan0 hw ether $1
 ifconfig wlan0 up
 
+template=$(<$HOSTAPD_CONF_TEMPLATE);
+echo "${template/$SSID_TOKEN/$2}" > "$HOSTAPD_CONF"
+
 service hostapd restart
-#service udhcpd restart
+service udhcpd restart
 echo "------------Complete---------------"
