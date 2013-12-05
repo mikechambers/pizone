@@ -33,13 +33,13 @@ index = 0
 while True:
 	item = addresses[index]
 	
-	print("%s : %s" % (item["description"], item["address"]))
+	print("%s : %s : %s" % (item["description"], item["address"], item["ssid"]))
 	
-	#return_code = subprocess.call(["/home/pi/PiZone/scripts", item["address"]])
+	return_code = subprocess.call(["/home/pi/PiZone/scripts", item["address"], item["ssid"]])
 	
-	#if return_code :
-	#	print("error running command.")
-	#	#sys.exit()
+	if return_code :
+		print("error running command.")
+		sys.exit()
 	
 	time.sleep(CHANGE_INTERVAL)
 	index = index + 1
