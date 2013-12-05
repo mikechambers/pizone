@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if [ "$(id -u)" != "0" ]; then
+   echo "Script must be run as root" 1>&2
+   exit 1
+fi
+
+
+if [ "$#" -ne 2 ]
+then
+	echo "Usage : cmac MAC_ADDRESS SSID"
+	exit 1
+fi
+
+
+echo "------------Changing Mac Address---------------"
+ifconfig wlan0 down
+ifconfig wlan0 hw ether $1
+ifconfig wlan0 up
+
+setssid "$2"
+echo "------------Complete---------------"
