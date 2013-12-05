@@ -19,5 +19,5 @@ ifconfig wlan0 down
 ifconfig wlan0 hw ether $1
 ifconfig wlan0 up
 
-setssid "$2"
+/home/pi/PiZone/scripts/setssid "$2"
 echo "------------Complete---------------"

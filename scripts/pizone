@@ -6,7 +6,7 @@ import os, sys, time, subprocess, json
 ADDRESSES_JSON = "address.json"
 
 #interval in seconds that address will be rotated
-CHANGE_INTERVAL = 10
+CHANGE_INTERVAL = 60 * 10
 
 if os.geteuid() != 0:
   print "Script must be run as root"
@@ -35,7 +35,7 @@ while True:
 	
 	print("%s : %s : %s" % (item["description"], item["address"], item["ssid"]))
 	
-	return_code = subprocess.call(["/home/pi/PiZone/scripts", item["address"], item["ssid"]])
+	return_code = subprocess.call(["sudo", "/home/pi/PiZone/scripts/cmac", item["address"], item["ssid"]])
 	
 	if return_code :
 		print("error running command.")
