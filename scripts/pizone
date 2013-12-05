@@ -1,28 +1,32 @@
 #!/usr/bin/env python
 
-import os, sys, time, subprocess
+import os, sys, time, subprocess, json
 
-#grab the existing address and reset when this exits out
-#ifconfig en1 | grep ether
-#capture kill for app
-#move interface into a var or command line arg
+#file path to file containing JSON data of mac addresses
+ADDRESSES_JSON = "address.json"
 
-#make sure we are running as root
+#interval in seconds that address will be rotated
+CHANGE_INTERVAL = 10
 
-euid = os.geteuid()
-if euid != 0:
+if os.geteuid() != 0:
   print "Script must be run as root"
-  exit()
+  sys.exit()
+
+try:
+	json_data = open(ADDRESSES_JSON)
+except IOError:
+	print("Error loading %s" % ADDRESSES_JSON)
+	sys.exit()
 
 
-addresses = [
-	{"address":"4E:53:50:4F:4F:43", "description":"Zelda A Link Between Worlds"},
-	{"address":"4E:53:50:4F:4F:46", "description":"Main"},
-	{"address":"4E:53:50:4F:4F:47", "description":"Animal Crossing New Leaf"},
-	{"address":"4E:53:50:4F:4F:48", "description":"Fire Emblem"}]
+try:
+	addresses = json.load(json_data)
+except ValueError:
+	print("Error parsing %s" % ADDRESSES_JSON)
+	sys.exit()
+finally:
+	json_data.close()
 
-#in seconds
-CHANGE_INTERVAL = 60 * 10
 
 index = 0
 
@@ -31,11 +35,11 @@ while True:
 	
 	print("%s : %s" % (item["description"], item["address"]))
 	
-	return_code = subprocess.call(["/home/pi/PiZone/scripts", item["address"]])
+	#return_code = subprocess.call(["/home/pi/PiZone/scripts", item["address"]])
 	
-	if return_code :
-		print("error running command.")
-		#sys.exit()
+	#if return_code :
+	#	print("error running command.")
+	#	#sys.exit()
 	
 	time.sleep(CHANGE_INTERVAL)
 	index = index + 1
