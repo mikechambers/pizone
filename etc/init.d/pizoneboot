@@ -20,18 +20,36 @@
 #http://www.thegeekstuff.com/2012/03/lsbinit-script/
 #PIDFILE=/var/run/my_daemon.pid
 
-NAME=PiZone
+NAME=pizone
+LOG_FILE="/var/log/pizone"
+PIZONE_PATH=/usr/local/bin/pizone
+
 
 case "$1" in 
 start)
+
+	#check if script is already running
+	#pgrep -f /usr/local/bin/pizone
+
+	if [ "$(pgrep -f $PIZONE_PATH)" ]
+	then
+		echo "$NAME is already running."
+		exit 2
+	fi
+
 	echo "Initializing $NAME"
+
+	if [ -f "$LOG_FILE" ]
+	then
+		rm "$LOG_FILE"
+	fi
+
 	ifup wlan0
 	/usr/local/bin/setssid "attwifi"
+	nohup python "$PIZONE_PATH" > "$LOG_FILE" &
 ;;
 stop)
-	#note, right now we dont need to kill it
-	#since the OS will do the same
-	#sudo pkill -9 -f /usr/local/bin/pizone
+	sudo pkill -9 -f "$PIZONE_PATH"
         echo "Stopping $NAME"
 ;;
 *)
