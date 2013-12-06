@@ -7,5 +7,5 @@
 	{"address":"4E:53:50:4F:4F:48", "description":"Fire Emblem", "ssid":"attwifi"},
 	{"address":"4E:53:50:4F:4F:49", "description":"Monster Hunter 3", "ssid":"attwifi"},
 	{"address":"00:25:9C:52:1C:6A", "description":"Nintendo World NYC", "ssid":"NDS-Guest"},
-	{"address":"8D-5C-6C-6D-2E-EF", "description":"mesh zone", "ssid":"attwifi"}
+	{"address":"8D:5C:6C:6D:2E:EF", "description":"mesh zone", "ssid":"attwifi"}
 ]
