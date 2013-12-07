@@ -20,7 +20,7 @@
     var ADDRESS_DATA_PATH = "/etc/pizone/address.json";
     
     //interval in milliseconds that address will be rotated
-    var REFRESH_INTERVAL = 1000 * 5; //1 minute
+    var REFRESH_INTERVAL = 1000 * 60 * 10; //1 minute
     
     //timeout interval when call external commands
     var PROCESS_TIMEOUT = 1000 * 30;
@@ -89,22 +89,28 @@
                 if (err) {
                     console.log("updateAddress:error");
                     console.log(err);
+		    onError(err);
                 } else {
-                    console.log("cmd output");
-                    console.log("stdout : " + stdout);
-                    console.log("stderr : " + stderr);
+		    	if (stdout) {
+				console.log(stdout);
+			}
+		    onSuccess();
                 }
             }
         );
         
+	//note, exit is called before the callbacks before are called
+	//so we use those to capture output and know when the process has exited
+	/*
         cmd.on("exit", function (code) {
             console.log("cmd exit");
         });
+	*/
         
     };
     
     var incrementIndex = function () {
-        index++;
+	index++;
         
         if (index >= addresses.length) {
             index = 0;
@@ -122,7 +128,7 @@
         //check values in item to make sure they are valid
         //mac address is valid, and ssid is not null
         
-        console.log(item);
+        console.log(item.description + " : " + item.address + " : " + item.ssid);
         //need to escape
         
         updateAddress(item.address, item.ssid,

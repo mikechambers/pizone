@@ -1,5 +1,9 @@
 #!/bin/bash
 
+HOSTAPD_CONF="/etc/hostapd/hostapd.conf"
+SSID_TOKEN={{SSID}}
+HOSTAPD_CONF_TEMPLATE="/etc/pizone/hostapd.conf.template"
+
 if [ "$(id -u)" != "0" ]; then
    echo "Script must be run as root" 1>&2
    exit 1
@@ -12,11 +16,21 @@ then
 	exit 1
 fi
 
+if [ ! -f $HOSTAPD_CONF_TEMPLATE ]
+then
+        echo "hostapd conf template not found: $HOSTAPD_CONF_TEMPLATE"
+        exit 1
+fi
 
-echo "------------Changing Mac Address---------------"
+#change mac address 
 ifconfig wlan0 down
 ifconfig wlan0 hw ether $1
 ifconfig wlan0 up
 
-setssid "$2"
-echo "------------Complete---------------"
+#write the new config file for apd
+template=$(<$HOSTAPD_CONF_TEMPLATE);
+echo "${template/$SSID_TOKEN/$1}" > "$HOSTAPD_CONF"
+
+#restart apd and udhcpd
+service hostapd restart 2>&1 >/dev/null
+service udhcpd restart 2>&1 >/dev/null
