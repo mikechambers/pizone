@@ -10,11 +10,14 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 
-if [ "$#" -ne 2 ]
+if [ "$#" -ne 1 ]
 then
-	echo "Usage : cmac MAC_ADDRESS SSID"
+	echo "Usage : cmac SSID [MAC_ADDRESS]"
 	exit 1
 fi
+
+SSID=$1
+MAC=$2
 
 if [ ! -f $HOSTAPD_CONF_TEMPLATE ]
 then
@@ -22,14 +25,26 @@ then
         exit 1
 fi
 
-#change mac address 
-ifconfig wlan0 down
-ifconfig wlan0 hw ether $1
-ifconfig wlan0 up
+if [ $2 ]
+then
+
+    #check that it is a valid mac address
+    found=$(echo "$MAC" | egrep "^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$")
+    if [ ! $found ]
+    then
+        echo "invalid mac address"
+        exit 1
+    fi
+
+    #change mac address
+    ifconfig wlan0 down
+    ifconfig wlan0 hw ether $MAC
+    ifconfig wlan0 up
+fi
 
 #write the new config file for apd
 template=$(<$HOSTAPD_CONF_TEMPLATE);
-echo "${template/$SSID_TOKEN/$2}" > "$HOSTAPD_CONF"
+echo "${template/$SSID_TOKEN/$SSID}" > "$HOSTAPD_CONF"
 
 #restart apd and udhcpd
 #stdout goes to /dev/null stderr goes to stderr

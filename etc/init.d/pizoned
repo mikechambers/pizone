@@ -46,8 +46,8 @@ start)
 	fi
 
 	ifup wlan0
-	/usr/local/bin/setssid "attwifi"
-	nohup python "$PIZONE_PATH" > "$LOG_FILE" &
+	/usr/local/bin/cmac "attwifi"
+	nohup "$PIZONE_PATH" > "$LOG_FILE" &
 ;;
 stop)
 	sudo pkill -9 -f "$PIZONE_PATH"

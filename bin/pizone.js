@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50 */
 /*global require, process, console, clearInterval, setInterval */
 
@@ -83,7 +85,7 @@
         //http://stackoverflow.com/questions/15168071/how-secure-is-using-execfile-for-bash-scripts
         var cmd = ChildProcess.execFile(
             "cmac",
-            [address, ssid],
+            [ssid, address],
             {timeout: PROCESS_TIMEOUT},
             function (err, stdout, stderr) {
                 if (err) {
