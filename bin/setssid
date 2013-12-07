@@ -27,4 +27,3 @@ echo "${template/$SSID_TOKEN/$1}" > "$HOSTAPD_CONF"
 
 service hostapd restart
 service udhcpd restart
-

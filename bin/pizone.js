@@ -1,10 +1,18 @@
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50 */
 /*global require, process, console, clearInterval, setInterval */
 
+/* TODO
+
+    -may want to use setTimeout and not setInterval
+    so the next loop only starts once the previous execution has ended
+    
+*/
+
 (function () {
     "use strict";
 
-    var FileSystem = require('fs');
+    var FileSystem = require("fs");
+    var ChildProcess = require("child_process");
     //nohup node simple-server.js > output.log &
     
     
@@ -13,6 +21,9 @@
     
     //interval in milliseconds that address will be rotated
     var REFRESH_INTERVAL = 1000 * 5; //1 minute
+    
+    //timeout interval when call external commands
+    var PROCESS_TIMEOUT = 1000 * 30;
     
     var addresses = [];
     var intervalId;
@@ -32,14 +43,13 @@
     
             if (!data) {
                 //right now, we fail silently if there is no data (i.e. empty string)
+                //maybe we should fail and exit?
                 console.log("error");
             } else {
                 try {
-                    var _t = JSON.parse(data);
-                    addresses = _t;
+                    addresses = JSON.parse(data);
                     
                     //make sure it is an array
-                    
                     if (Object.prototype.toString.call(addresses) !== "[object Array]") {
                         throw "Object not Array";
                     }
@@ -54,7 +64,47 @@
         });
     };
     
-    var updateAddress = function () {
+    var updateAddress = function (address, ssid, onSuccess, onError) {
+        
+        //^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$
+        
+        if(!address.match(/^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$/g)) {
+            onError("Invalid mac address");
+            return;
+        }
+        
+        if(!ssid || !ssid.length) {
+            onError("Invalid SSID.");
+            return;
+        }
+        
+        //note, the arguments are not passed on the shell, so we don't have to worry
+        //about injection (although the script being called does)
+        //http://stackoverflow.com/questions/15168071/how-secure-is-using-execfile-for-bash-scripts
+        var cmd = ChildProcess.execFile(
+            "cmac",
+            [address, ssid],
+            {timeout: PROCESS_TIMEOUT},
+            function (err, stdout, stderr) {
+                if (err) {
+                }
+            }
+        );
+        
+        cmd.on("exit", function (code) {
+        });
+        
+    };
+    
+    var incrementIndex = function () {
+        index++;
+        
+        if (index >= addresses.length) {
+            index = 0;
+        }
+    }
+    
+    var loadNextAddress = function () {
         if (!addresses.length) {
             index = 0;
             return;
@@ -66,16 +116,22 @@
         //mac address is valid, and ssid is not null
         
         console.log(item);
+        //need to escape
         
-        index++;
-        
-        if (index >= addresses.length) {
-            index = 0;
-        }
+        updateAddress(item.address, item.ssid,
+            function () {
+                incrementIndex();
+            },
+            function (err) {
+                console.log("Error setting address:");
+                console.log(err);
+                incrementIndex();
+            }
+        );
     };
     
     var onInterval = function () {
-        updateAddress();
+        loadNextAddress();
     };
     
     var resetInterval = function () {
@@ -102,7 +158,7 @@
         
         loadAddressData(
             function () {
-                updateAddress();
+                loadNextAddress();
                 resetInterval();
             },
             function (err) {
