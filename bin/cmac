@@ -29,8 +29,9 @@ ifconfig wlan0 up
 
 #write the new config file for apd
 template=$(<$HOSTAPD_CONF_TEMPLATE);
-echo "${template/$SSID_TOKEN/$1}" > "$HOSTAPD_CONF"
+echo "${template/$SSID_TOKEN/$2}" > "$HOSTAPD_CONF"
 
 #restart apd and udhcpd
+#stdout goes to /dev/null stderr goes to stderr
 service hostapd restart 2>&1 >/dev/null
 service udhcpd restart 2>&1 >/dev/null
