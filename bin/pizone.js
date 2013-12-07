@@ -88,10 +88,15 @@
             function (err, stdout, stderr) {
                 if (err) {
                 }
+                console.log("cmd output");
+                console.log(err);
+                console.log(stdout);
+                console.log(stderr);
             }
         );
         
         cmd.on("exit", function (code) {
+            console.log("cmd exit");
         });
         
     };
