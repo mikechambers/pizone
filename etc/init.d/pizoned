@@ -22,7 +22,7 @@
 
 NAME=pizone
 LOG_FILE="/var/log/pizone"
-PIZONE_PATH=/usr/local/bin/pizone
+PIZONE_PATH=/home/pi/pizone/bin/pizone.js
 
 
 case "$1" in 
@@ -31,7 +31,7 @@ start)
 	#check if script is already running
 	#pgrep -f /usr/local/bin/pizone
 
-	//todo: this needs to be updated
+	#todo: this needs to be updated
 	if [ "$(pgrep -f $PIZONE_PATH)" ]
 	then
 		echo "$NAME is already running."
@@ -47,7 +47,7 @@ start)
 
 	ifup wlan0
 	/usr/local/bin/cmac "attwifi"
-	nohup "$PIZONE_PATH" > "$LOG_FILE" &
+	nohup /usr/local/bin/node "$PIZONE_PATH" > "$LOG_FILE" &
     
     #maybe we start the udcp and apd services here
 ;;

@@ -10,7 +10,7 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 
-if [ "$#" -ne 1 ]
+if [ "$#" -lt 1 ]
 then
 	echo "Usage : cmac SSID [MAC_ADDRESS]"
 	exit 1

@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50 */
 /*global require, process, console, clearInterval, setInterval */
 
