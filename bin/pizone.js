@@ -68,12 +68,12 @@
         
         //^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$
         
-        if(!address.match(/^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$/g)) {
+        if (!address.match(/^([0-9A-F]{2}[:\-]){5}([0-9A-F]{2})$/g)) {
             onError("Invalid mac address");
             return;
         }
         
-        if(!ssid || !ssid.length) {
+        if (!ssid || !ssid.length) {
             onError("Invalid SSID.");
             return;
         }
@@ -87,11 +87,13 @@
             {timeout: PROCESS_TIMEOUT},
             function (err, stdout, stderr) {
                 if (err) {
+                    console.log("updateAddress:error");
+                    console.log(err);
+                } else {
+                    console.log("cmd output");
+                    console.log("stdout : " + stdout);
+                    console.log("stderr : " + stderr);
                 }
-                console.log("cmd output");
-                console.log(err);
-                console.log(stdout);
-                console.log(stderr);
             }
         );
         
@@ -107,7 +109,7 @@
         if (index >= addresses.length) {
             index = 0;
         }
-    }
+    };
     
     var loadNextAddress = function () {
         if (!addresses.length) {
@@ -131,8 +133,7 @@
                 console.log("Error setting address:");
                 console.log(err);
                 incrementIndex();
-            }
-        );
+            });
     };
     
     var onInterval = function () {
