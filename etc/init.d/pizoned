@@ -31,6 +31,7 @@ start)
 	#check if script is already running
 	#pgrep -f /usr/local/bin/pizone
 
+	//todo: this needs to be updated
 	if [ "$(pgrep -f $PIZONE_PATH)" ]
 	then
 		echo "$NAME is already running."
