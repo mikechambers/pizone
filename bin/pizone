@@ -1,0 +1,12 @@
+#!/bin/env node
+
+
+var printUsage = function(){
+    console.log("Usage : pizone");
+}
+
+var argv = process.argv;
+
+if(!argv.length){
+    process.exit(1);
+}
