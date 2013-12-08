@@ -7,7 +7,6 @@
     var fs = require("fs");
     var config = require("./config.js");
     var addresses = [];
-    var randomizeAddress = true;
     var index = 0;
     
     /**
@@ -68,7 +67,7 @@
         return item;
     };
     
-    var load = function (onSuccessCallback, onErrorCallback) {
+    var load = function (onSuccessCallback, onErrorCallback, shuffle) {
         
         fs.readFile(config.ADDRESS_DATA_PATH, 'utf8', function (err, data) {
             
@@ -98,7 +97,7 @@
                 }
             }
 
-            if (randomizeAddress) {
+            if (shuffle) {
                 shuffleArray(addresses);
             }
             
