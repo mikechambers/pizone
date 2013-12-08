@@ -8,7 +8,7 @@
     exports.ADDRESS_DATA_PATH = "/etc/pizone/address.json";
     
     //interval in milliseconds that address will be rotated
-    exports.REFRESH_INTERVAL = 1000 * 2 * 1; //10 minutes
+    exports.REFRESH_INTERVAL = 1000 * 60 * 10; //10 minutes
     
     //timeout interval when call external commands
     exports.PROCESS_TIMEOUT = 1000 * 30;
