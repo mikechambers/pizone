@@ -13,6 +13,7 @@
      * Randomize array element order in-place.
      * Using Fisher-Yates shuffle algorithm.
      */
+    //todo: move this to a utils module
     var shuffleArray = function (arr) {
         
         if (!arr || !arr.length) {
