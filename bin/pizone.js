@@ -32,19 +32,24 @@
     var index = 0;
     
     
-/**
- * Randomize array element order in-place.
- * Using Fisher-Yates shuffle algorithm.
- */
-function shuffleArray(array) {
-    for (var i = array.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
-    return array;
-}
+    /**
+     * Randomize array element order in-place.
+     * Using Fisher-Yates shuffle algorithm.
+     */
+    var shuffleArray = function (arr) {
+        
+        if (!arr || arr.length) {
+            return;
+        }
+        
+        var i;
+        for (i = arr.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+    };
 
     var loadAddressData = function (onSuccessCallback, onErrorCallback) {
         
@@ -76,8 +81,8 @@ function shuffleArray(array) {
                 }
             }
 
-            if (randomizeAddress){
-            
+            if (randomizeAddress) {
+                shuffleArray(addresses);
             }
             
             onSuccessCallback();
@@ -109,12 +114,12 @@ function shuffleArray(array) {
                 if (err) {
                     console.log("updateAddress:error");
                     console.log(err);
-		    onError(err);
+                    onError(err);
                 } else {
-		    	if (stdout) {
-				console.log(stdout);
-			}
-		    onSuccess();
+                    if (stdout) {
+				        console.log(stdout);
+                    }
+                    onSuccess();
                 }
             }
         );
@@ -130,7 +135,7 @@ function shuffleArray(array) {
     };
     
     var incrementIndex = function () {
-	index++;
+        index++;
         
         if (index >= addresses.length) {
             index = 0;
@@ -148,7 +153,7 @@ function shuffleArray(array) {
         //check values in item to make sure they are valid
         //mac address is valid, and ssid is not null
         
-        console.log(item.description + " : " + item.address + " : " + item.ssid);
+        console.log(new Date().toISOString() + " : " + item.description + " : " + item.address + " : " + item.ssid);
         //need to escape
         
         updateAddress(item.address, item.ssid,
