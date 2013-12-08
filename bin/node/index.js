@@ -11,83 +11,15 @@
 (function () {
     "use strict";
 
-    var FileSystem = require("fs");
-    var ChildProcess = require("child_process");
+    var config = require("./config.js");
+    var address_manager = require("./address_manager.js");
+    
+    var child_process = require("child_process");
     //nohup node simple-server.js > output.log &
     
-    
-    //file path to file containing JSON data of mac addresses
-    var ADDRESS_DATA_PATH = "/etc/pizone/address.json";
-    
-    //interval in milliseconds that address will be rotated
-    var REFRESH_INTERVAL = 1000 * 60 * 10; //1 minute
-    
-    //timeout interval when call external commands
-    var PROCESS_TIMEOUT = 1000 * 30;
-
-    var randomizeAddress = true;
-    
-    var addresses = [];
+    //var addresses = [];
     var intervalId;
     var index = 0;
-    
-    
-    /**
-     * Randomize array element order in-place.
-     * Using Fisher-Yates shuffle algorithm.
-     */
-    var shuffleArray = function (arr) {
-        
-        if (!arr || !arr.length) {
-            return;
-        }
-        
-        var i;
-        for (i = arr.length - 1; i > 0; i--) {
-            var j = Math.floor(Math.random() * (i + 1));
-            var temp = arr[i];
-            arr[i] = arr[j];
-            arr[j] = temp;
-        }
-    };
-
-    var loadAddressData = function (onSuccessCallback, onErrorCallback) {
-        
-        FileSystem.readFile(ADDRESS_DATA_PATH, 'utf8', function (err, data) {
-            
-            if (err) {
-                console.log("loadAddressData");
-                console.log(err);
-                onErrorCallback(err);
-                return;
-            }
-    
-            if (!data) {
-                //right now, we fail silently if there is no data (i.e. empty string)
-                //maybe we should fail and exit?
-                console.log("error");
-            } else {
-                try {
-                    addresses = JSON.parse(data);
-                    
-                    //make sure it is an array
-                    if (Object.prototype.toString.call(addresses) !== "[object Array]") {
-                        throw "Object not Array";
-                    }
-                    
-                } catch (e) {
-                    console.log("Error : Address data JSON is not in correct format.");
-                    addresses = [];
-                }
-            }
-
-            if (randomizeAddress) {
-                shuffleArray(addresses);
-            }
-            
-            onSuccessCallback();
-        });
-    };
     
     var updateAddress = function (address, ssid, onSuccess, onError) {
         
@@ -106,10 +38,10 @@
         //note, the arguments are not passed on the shell, so we don't have to worry
         //about injection (although the script being called does)
         //http://stackoverflow.com/questions/15168071/how-secure-is-using-execfile-for-bash-scripts
-        var cmd = ChildProcess.execFile(
+        var cmd = child_process.execFile(
             "cmac",
             [ssid, address],
-            {timeout: PROCESS_TIMEOUT},
+            {timeout: config.PROCESS_TIMEOUT},
             function (err, stdout, stderr) {
                 if (err) {
                     console.log("updateAddress:error");
@@ -134,41 +66,28 @@
         
     };
     
-    var incrementIndex = function () {
-        index++;
-        
-        if (index >= addresses.length) {
-            index = 0;
-        }
-    };
-    
-    var loadNextAddress = function () {
-        if (!addresses.length) {
-            index = 0;
-            return;
-        }
-        
-        var item = addresses[index];
-        
+    var setAccessPoint = function (item) {
         //check values in item to make sure they are valid
         //mac address is valid, and ssid is not null
+        
+        //var item = address_manager.getNextAddress();
         
         console.log(new Date().toISOString() + " : " + item.description + " : " + item.address + " : " + item.ssid);
         //need to escape
         
         updateAddress(item.address, item.ssid,
             function () {
-                incrementIndex();
+                //incrementIndex();
             },
             function (err) {
                 console.log("Error setting address:");
                 console.log(err);
-                incrementIndex();
+                //incrementIndex();
             });
     };
     
     var onInterval = function () {
-        loadNextAddress();
+        setAccessPoint(address_manager.getNextAddress());
     };
     
     var resetInterval = function () {
@@ -179,7 +98,7 @@
         
         intervalId = setInterval(
             onInterval,
-            REFRESH_INTERVAL
+            config.REFRESH_INTERVAL
         );
     };
     
@@ -193,9 +112,9 @@
             process.exit(1);
         }
         
-        loadAddressData(
+        address_manager.load(
             function () {
-                loadNextAddress();
+                setAccessPoint(address_manager.getFirstAddress());
                 resetInterval();
             },
             function (err) {

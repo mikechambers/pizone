@@ -22,7 +22,7 @@
 
 NAME=pizone
 LOG_FILE="/var/log/pizone"
-PIZONE_PATH=/home/pi/pizone/bin/pizone.js
+PIZONE_PATH=/home/pi/pizone/bin/node/index.js
 
 
 case "$1" in 
