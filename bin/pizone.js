@@ -38,7 +38,7 @@
      */
     var shuffleArray = function (arr) {
         
-        if (!arr || arr.length) {
+        if (!arr || !arr.length) {
             return;
         }
         
