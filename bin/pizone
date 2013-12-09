@@ -1,12 +1,84 @@
-#!/bin/env node
+#!/usr/bin/env node
 
+/*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50 */
+/*global require, exports, process */
 
-var printUsage = function(){
-    console.log("Usage : pizone");
-}
+(function () {
+    "use strict";
+    
+    var request;
+    var config = require("./node/config.js");
+    var baseUrl = "http://127.0.0.1:8080/";  
+    
+    var main = function () {
+        
+        var argv = process.argv;
+        
+        if(argv.length < 3) {
+            printUsage();
+            process.exit(1);
+        }  
+    
+        request = require("request");
+        var cmd = argv[2];
+        
+        if(!route(cmd)) {
+            console.log("Unknown command : " + cmd);
+            process.exit(1);
+        }
+    };
+    
+    var route = function (cmd) {
+        cmd = cmd.toUpperCase();
+        if (typeof handlers[cmd] === "function") {
+            handlers[cmd]();
+        } else {
+            return false;
+        }
+        return true;
+    }
 
-var argv = process.argv;
+    var printUsage = function(){
+        console.log("Usage : pizone CMD");
+    }
+    
+    var handleError = function (error) {
+        console.log("Error : " + error);
+    }
+    
+    var getAddresses = function () {
+        var url = baseUrl + "addresses";
+        request(url, 
+            function (error, response, body) {
+                if(error) {
+                    //Error : Error: connect ECONNREFUSED
+                    handleError(error);
+                }
+                if (!error && response.statusCode == 200) {
+                    console.log(body);
+                }
+            }
+        );
+    };    
+    
+    var getCurrentAddress = function () {
+        var url = baseUrl + "currentaddress";
+        request(url, 
+            function (error, response, body) {
+                if(error) {
+                    //Error : Error: connect ECONNREFUSED
+                    handleError(error);
+                }
+                if (!error && response.statusCode == 200) {
+                    console.log(body);
+                }
+            }
+        );
+    };
+    
+    var handlers = {};
+    handlers.CURRENTADDRESS = getCurrentAddress;
+    handlers.ADDRESSES = getAddresses;
 
-if(!argv.length){
-    process.exit(1);
-}
+    main();
+}());
