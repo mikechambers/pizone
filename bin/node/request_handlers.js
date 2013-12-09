@@ -31,9 +31,15 @@
         return out;
     };
     
-    var getCurrentAddress = function (response) {
+    var sendJSONResponse = function (response, obj) {
         response.writeHead(200, jsonHeader);
-        
+        response.write(objectToJson(obj));
+        response.end();
+    };
+    
+    /************** handlers ****************/
+    
+    var getCurrentAddress = function (response) {
         var item = address_manager.getCurrentAddress();
         
         var out = item;
@@ -41,17 +47,13 @@
             out = generateError("No current address.");
         }
         
-        response.write(objectToJson(out));
-        response.end();
+        sendJSONResponse(response, out);
     };
     
     var getAddresses = function (response) {
-        response.writeHead(200, jsonHeader);
-        
         var items = address_manager.getAddresses();
         
-        response.write(objectToJson(items));
-        response.end();
+        sendJSONResponse(response, items);
     };
     
     var handlers = {};
