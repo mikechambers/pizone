@@ -10,6 +10,14 @@
         test = true;
     }
     
+    /***** Authentication *******/
+    exports.REQUIRE_AUTHENTICATION = true;
+    exports.AUTHENTICATION_REALM = "pizone";
+    exports.SERVER_USERNAME = "pizone";
+    exports.SERVER_PASSWORD = "pizone";
+    
+    
+    
     exports.ENABLE_API_SERVICE = true;
     
     exports.HTTP_PORT = 8080;

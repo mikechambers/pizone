@@ -7,24 +7,19 @@
     var http = require("http");
     var config = require("./config.js");
     var url = require("url");
+    var authentication = require("./authentication.js");
     
     var server;
     
     var start = function (route, handle) {
         server = http.createServer(
             function (request, response) {
-            
-            /*
-            var header=request.headers['authorization']||'',        // get the header
-                  token=header.split(/\s+/).pop()||'',            // and the encoded auth token
-                  auth=new Buffer(token, 'base64').toString(),    // convert from base64
-                  parts=auth.split(/:/),                          // split on colon
-                  username=parts[0],
-                  password=parts[1];
                 
-                console.log(request.headers);
-                console.log(username, password);
-            */
+                if (!authentication.isAuthenticatedRequest(request)) {
+                    console.log("Invalid authentication : ", request.headers, request.url, request.method, request.statusCode);
+                    authentication.sendNotAuthenticatedResponse(response);
+                    return;
+                }
                 
                 var pathname = url.parse(request.url).pathname;
                 route(handle, pathname, response);
@@ -55,5 +50,4 @@
     
     exports.stop = stop;
     exports.start = start;
-    
 }());
