@@ -56,7 +56,7 @@
     
     var handlers = {};
     handlers["/CURRENTADDRESS"] = getCurrentAddress;
-    handlers["/GETADDRESSES"] = getAddresses;
+    handlers["/ADDRESSES"] = getAddresses;
     
     exports.handlers = handlers;
 }());
