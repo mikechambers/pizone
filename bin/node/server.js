@@ -13,6 +13,19 @@
     var start = function (route, handle) {
         server = http.createServer(
             function (request, response) {
+            
+            /*
+            var header=request.headers['authorization']||'',        // get the header
+                  token=header.split(/\s+/).pop()||'',            // and the encoded auth token
+                  auth=new Buffer(token, 'base64').toString(),    // convert from base64
+                  parts=auth.split(/:/),                          // split on colon
+                  username=parts[0],
+                  password=parts[1];
+                
+                console.log(request.headers);
+                console.log(username, password);
+            */
+                
                 var pathname = url.parse(request.url).pathname;
                 route(handle, pathname, response);
                 console.log("Request received : " + pathname);

@@ -6,6 +6,8 @@
 (function () {
     "use strict";
     
+    //todo: add u/p
+    
     var request;
     var config = require("./node/config.js");
     var baseUrl = "http://127.0.0.1:8080/";  
