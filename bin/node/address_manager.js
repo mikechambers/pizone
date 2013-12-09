@@ -43,10 +43,6 @@
     };
     
     var getFirstAddress = function () {
-        if (!addresses || !addresses.length) {
-            return null;
-        }
-        
         //todo : check that it is valid index?
         return getAddressAtIndex(0);
     };
@@ -66,6 +62,10 @@
         var item = addresses[index];
         
         return item;
+    };
+    
+    var getAddresses = function () {
+        return addresses;
     };
     
     var load = function (onSuccessCallback, onErrorCallback, shuffle) {
@@ -106,7 +106,9 @@
         });
     };
     
+    exports.getAddresses = getAddresses;
     exports.getNextAddress = getNextAddress;
     exports.getFirstAddress = getFirstAddress;
+    exports.getCurrentAddress = getCurrentAddress;
     exports.load = load;
 }());

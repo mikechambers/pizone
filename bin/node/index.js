@@ -13,6 +13,7 @@
 
     var config = require("./config.js");
     var daemon = require("./daemon.js");
+    var server = require("./server.js");
     var address_manager = require("./address_manager.js");
     
     var main = function () {
@@ -33,6 +34,14 @@
         address_manager.load(
             function () {
                 daemon.start();
+                
+                if (config.ENABLE_API_SERVICE) {
+                    var route = require("./router.js");
+                    var request_handlers = require("./request_handlers.js");
+                    
+                    server.start(route.route, request_handlers.handlers);
+                }
+                
             },
             function (err) {
                 //what should we do here?
