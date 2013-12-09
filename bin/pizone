@@ -12,6 +12,14 @@
     
     var main = function () {
         
+        var ROOT_ID = 0;
+        
+        //check that we are running as root
+        if (process.getuid() !== ROOT_ID) {
+            console.log("Script must be run as root.");
+            process.exit(1);
+        }        
+        
         var argv = process.argv;
         
         if(argv.length < 3) {
