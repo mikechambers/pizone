@@ -14,6 +14,7 @@
     var config = require("./config.js");
     var daemon = require("./daemon.js");
     var server = require("./server.js");
+    var static_server = require("./static_server.js");
     var address_manager = require("./address_manager.js");
     
     var main = function () {
@@ -40,6 +41,9 @@
                     var request_handlers = require("./request_handlers.js");
                     
                     server.start(route.route, request_handlers.handlers);
+                    
+                    //maybe have option to launch API service, without web interface?
+                    static_server.start();
                 }
                 
             },

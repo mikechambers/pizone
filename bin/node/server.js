@@ -15,9 +15,7 @@
         server = http.createServer(
             function (request, response) {
                 
-                if (!authentication.isAuthenticatedRequest(request)) {
-                    console.log("Invalid authentication : ", request.headers, request.url, request.method, request.statusCode);
-                    authentication.sendNotAuthenticatedResponse(response);
+                if (!authentication.checkAndHandleAuthentication(request, response)) {
                     return;
                 }
                 
@@ -27,9 +25,9 @@
             }
         
         );
-        server.listen(config.HTTP_PORT);
+        server.listen(config.API_PORT);
         
-        console.log("pizone API service initialized. Listening on port " + config.HTTP_PORT);
+        console.log("pizone API service initialized. Listening on port " + config.API_PORT);
     };
     
     var stop = function (onClose) {

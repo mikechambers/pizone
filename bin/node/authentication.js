@@ -57,6 +57,17 @@
         return true;
     };
     
+    var checkAndHandleAuthentication = function (request, response) {
+        if (!isAuthenticatedRequest(request)) {
+            console.log("Invalid authentication : ", request.headers, request.url, request.method, request.statusCode);
+            sendNotAuthenticatedResponse(response);
+            return false;
+        }
+        
+        return true;
+    };
+    
+    exports.checkAndHandleAuthentication = checkAndHandleAuthentication;
     exports.decodeAuthHeader = decodeAuthHeader;
     exports.validateCredentials = validateCredentials;
     exports.sendNotAuthenticatedResponse = sendNotAuthenticatedResponse;

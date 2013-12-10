@@ -39,6 +39,10 @@
     
     /************** handlers ****************/
     
+    var getInfo = function () {
+        //todo: return all items, current item, current index, refresh interval, time in ms until next item
+    };
+    
     var getCurrentAddress = function (response) {
         var item = address_manager.getCurrentAddress();
         
@@ -59,6 +63,7 @@
     var handlers = {};
     handlers["/CURRENTADDRESS"] = getCurrentAddress;
     handlers["/ADDRESSES"] = getAddresses;
+    handlers["/GETINFO"] = getInfo;
     
     exports.handlers = handlers;
 }());
