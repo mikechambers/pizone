@@ -18,7 +18,6 @@
             return;
         }
         
-        
         system.updateAccessPoint(ssid, address, callback);(item.ssid, item.address,
             function (err, out) {
                 if (err) {

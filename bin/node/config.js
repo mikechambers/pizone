@@ -33,7 +33,6 @@
     
     //note : overriden below when in test mode
     exports.PRETTY_PRINT_JSON_RESPONSE = true;
-    
     exports.JSON_PRETTY_PRINT_DELIMETER = "\t";
     
     //interval in milliseconds that address will be rotated
@@ -47,5 +46,4 @@
     
     //timeout interval when call external commands
     exports.PROCESS_TIMEOUT = 1000 * 30;
-    
 }());
