@@ -9,6 +9,7 @@
     var config = require("./config.js");
     var utils = require("./utils.js");
     var fs = require("fs");
+    var os = require("os");
     
     var restartUDHCPD = function (callback) {
         //service udhcpd restart 2>&1 >/dev/null
@@ -33,6 +34,40 @@
         fs.writeFile(config.HOSTAPD_CONF_PATH, data, callback);
     };
     
+    //todo: we may want to cache the results of this, so we dont have to read a file
+    //everytime this api is called. Might not be a big deal though, since there should only ever be
+    //one person accessing the site
+    var readRestrictedAccessList = function() {
+        fs.readFile(config.HOSTAPD_RESTRICTED_ADDRESSES_PATH, 
+            function(err, data) {
+                var addresses = data.split(os.EOL);
+                callback(null, addresses);
+            }
+        );
+    };
+    
+    var saveRestrictedAccessList = function (addresses, callback) {
+        var tmp = addresses.join(os.EOL);
+        fs.writeFile(config.HOSTAPD_RESTRICTED_ADDRESSES_PATH, tmp, callback);
+    };
+    
+    var updateRestrictedAccessList = function (addresses, callback) {
+        //todo: confirm whether we need to restart service after updating access list
+        async.series(
+            [
+                function(callback){saveRestrictedAccessList(addresses, callback)};
+                restartAPD
+            ],
+            function (err, out) {
+                if (err) {
+                    callback(err);
+                    return;
+                }
+                callback(null, out);
+            }
+        );
+    };
+    
     var updateAPConf = function (ssid, callback) {
         
         var _generateAPConf = function(data, callback) {
@@ -40,6 +75,7 @@
             callback(null, conf, callback);
         }
         
+        //todo: do we need to restart restartUDHCPD (it is slow)
         async.waterfall(
             [
                 loadAPConfTemplate,
