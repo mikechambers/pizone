@@ -16,9 +16,13 @@
     exports.SERVER_USERNAME = "pizone";
     exports.SERVER_PASSWORD = "pizone";
     
-    
+    exports.ACCESS_POINT_INTERFACE = "wlan0";
     
     exports.ENABLE_API_SERVICE = true;
+    
+    
+    exports.HOSTAPD_CONF_PATH = "/etc/hostapd/hostapd.conf";
+    exports.HOSTAPD_CONF_TEMPLATE_PATH = "/etc/pizone/hostapd.conf.template";
     
     exports.API_PORT = 8080;
     exports.HTTP_PORT = 80;
