@@ -20,17 +20,42 @@
         process_runner.exec("service", ["hostapd", "restart"], callback);
     };
     
-    var loadAPConf = function (callback) {
+    var loadAPConfTemplate = function (callback) {
         fs.readFile(config.HOSTAPD_CONF_TEMPLATE_PATH, callback);
     };
     
+    var createAPConf = function (ssid, template) {
+        template.replace("{{SSID}}", ssid);
+        return template;
+    };
+    
     var writeAPConf = function (data, callback) {
-        fs.writeFile(config.HOSTAPD_CONF_PATH, callback);
+        fs.writeFile(config.HOSTAPD_CONF_PATH, data, callback);
     };
     
     var updateAPConf = function (ssid, callback) {
-        //template=$(<$HOSTAPD_CONF_TEMPLATE);
-        //echo "${template/$SSID_TOKEN/$SSID}" > "$HOSTAPD_CONF"    
+        
+        var _generateAPConf = function(data, callback) {
+            var conf = createAPConf(ssid, data);
+            callback(null, conf, callback);
+        }
+        
+        async.waterfall(
+            [
+                loadAPConfTemplate,
+                _generateAPConf,
+                writeAPConf,
+                restartAPD,
+                restartUDHCPD
+            ],
+            function (err, out) {
+                if (err) {
+                    callback(err);
+                    return;
+                }
+                callback(null, out);
+            }
+        );  
     };
     
     var updateAccessPoint = function (ssid, address, callback) {
@@ -54,8 +79,8 @@
                 function (callback) {process_runner.exec("ifconfig", [config.ACCESS_POINT_INTERFACE, "hw", "ether", address], callback); },
                 function (callback) {process_runner.exec("ifconfig", [config.ACCESS_POINT_INTERFACE, "up"], callback); },
                 function (callback) {updateAPConf(ssid, callback); },
-                function (callback) {restartAPD(callback); },
-                function (callback) {restartUDHCPD(callback); }
+                restartAPD,
+                restartUDHCPD
             ],
             function (err, out) {
                 if (err) {

@@ -6,7 +6,7 @@
 
     var config = require("./config.js");
     var address_manager = require("./address_manager.js");
-    var access_point = require("./access_point.js");
+    var system = require("./system.js");
 
     var intervalId;
     
@@ -19,15 +19,13 @@
         }
         
         
-        access_point.update(item.ssid, item.address,
-            function (stdout) {
-                if (stdout) {
-                    console.log(stdout);
+        system.updateAccessPoint(ssid, address, callback);(item.ssid, item.address,
+            function (err, out) {
+                if (err) {
+                    console.log(err, out);
+                    return;
                 }
-            },
-            function (err) {
-                console.log("Error setting address:");
-                console.log(err);
+                console.log(out);
             });
     };
     
