@@ -50,7 +50,7 @@ You can find a listing and discussion of Raspberry Pi and various USB WiFi adapt
 
 [http://elinux.org/RPi_USB_Wi-Fi_Adapters](http://elinux.org/RPi_USB_Wi-Fi_Adapters)
 
-## Installation
+## Configuration
 
 Install Raspbian from : [http://www.raspberrypi.org/downloads](http://www.raspberrypi.org/downloads)
 
@@ -104,6 +104,7 @@ Below is my `/etc/network/interfaces` network configuration file. This is after 
 Note, you only need to update this again if you want to give your Raspberry Pi a static IP.
 
 	auto lo
+	auto wlan0
 
 	iface lo inet loopback
 
@@ -168,6 +169,9 @@ Or to view in the browser (useful later):
 
 Note, Bonjour works without any configuration on Mac based machines. You can find information on running Bonjour on Windows at [http://www.apple.com/support/bonjour/](http://www.apple.com/support/bonjour/)
 
+## Install pizone
+
+
 
 # Changing Mac Address
 
@@ -178,8 +182,6 @@ Note, on my machine I had to disable ifplugd for wlan0 interface, otherwise, I w
     sudo vim /etc/default/ifplugd
     INTERFACES="eth0"
     HOTPLUG_INTERFACES="eth0"
-
-Once you do this, you have to manually bring up the network at boot.
 
 Then set it to start at boot:
 

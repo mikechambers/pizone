@@ -45,11 +45,7 @@ start)
 		rm "$LOG_FILE"
 	fi
 
-	ifup wlan0
-	/usr/local/bin/cmac "attwifi"
 	nohup /usr/local/bin/node "$PIZONE_PATH" > "$LOG_FILE" &
-    
-    #maybe we start the udcp and apd services here
 ;;
 stop)
 	sudo pkill -9 -f "$PIZONE_PATH"
