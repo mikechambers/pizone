@@ -22,7 +22,7 @@
     };
     
     var loadAPConfTemplate = function (callback) {
-        fs.readFile(config.HOSTAPD_CONF_TEMPLATE_PATH, callback);
+        fs.readFile(config.HOSTAPD_CONF_TEMPLATE_PATH, {encoding: "String"}, callback);
     };
     
     var createAPConf = function (ssid, template) {
@@ -39,6 +39,7 @@
     //one person accessing the site
     var readRestrictedAccessList = function (callback) {
         fs.readFile(config.HOSTAPD_RESTRICTED_ADDRESSES_PATH,
+                    {encoding: "String"},
             function (err, data) {
                 var addresses = data.split(os.EOL);
                 callback(null, addresses);
