@@ -37,13 +37,13 @@
     //todo: we may want to cache the results of this, so we dont have to read a file
     //everytime this api is called. Might not be a big deal though, since there should only ever be
     //one person accessing the site
-    var readRestrictedAccessList = function() {
-        fs.readFile(config.HOSTAPD_RESTRICTED_ADDRESSES_PATH, 
-            function(err, data) {
+    var readRestrictedAccessList = function (callback) {
+        fs.readFile(config.HOSTAPD_RESTRICTED_ADDRESSES_PATH,
+            function (err, data) {
                 var addresses = data.split(os.EOL);
                 callback(null, addresses);
             }
-        );
+            );
     };
     
     var saveRestrictedAccessList = function (addresses, callback) {
@@ -55,7 +55,7 @@
         //todo: confirm whether we need to restart service after updating access list
         async.series(
             [
-                function(callback){saveRestrictedAccessList(addresses, callback)};
+                function (callback) {saveRestrictedAccessList(addresses, callback); },
                 restartAPD
             ],
             function (err, out) {
@@ -70,10 +70,10 @@
     
     var updateAPConf = function (ssid, callback) {
         
-        var _generateAPConf = function(data, callback) {
+        var _generateAPConf = function (data, callback) {
             var conf = createAPConf(ssid, data);
             callback(null, conf, callback);
-        }
+        };
         
         //todo: do we need to restart restartUDHCPD (it is slow)
         async.waterfall(
@@ -91,7 +91,7 @@
                 }
                 callback(null, out);
             }
-        );  
+        );
     };
     
     var updateAccessPoint = function (ssid, address, callback) {

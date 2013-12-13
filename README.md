@@ -169,23 +169,98 @@ Or to view in the browser (useful later):
 
 Note, Bonjour works without any configuration on Mac based machines. You can find information on running Bonjour on Windows at [http://www.apple.com/support/bonjour/](http://www.apple.com/support/bonjour/)
 
-## Install pizone
+## Installation
+
+###node.js
+
+pizone requires [node.js](http://nodejs.org) to be installed, as well as a number of node.js modules.
+
+The current version of pizone has been tested on node.js version [v0.10.22](http://nodejs.org/dist/v0.10.22/node-v0.10.22-linux-arm-pi.tar.gz).
+
+Download node for Raspberry Pi from “Other release files" link on the bottom of the page at:
+
+[http://nodejs.org/download/](http://nodejs.org/download/)
+
+Once downloaded, run the following commands:
+
+    sudo mkdir /opt/node
+    tar xvzf ode-v0.10.22-linux-arm-pi.tar.gz
+    sudo cp -r node-v0.10.22-linux-arm-pi/* /opt/node
+    sudo ln -s /opt/node/bin/node /usr/local/bin/node
+    sudo ln -s /opt/node/bin/npm /usr/local/bin/npm
+
+This installs node.js into the */opt/node* directory, and then creates simlinks to the *node* and *npm* binaries.
+
+In order to confirm that node is running, run the following command:
+
+    node —version
+
+This should output the version number:
+
+    v0.10.22
+
+Next, install the node modules require by pizone:
+
+    sudo npm install request
+    sudo npm install node-static
+    sudo npm install async
 
 
+### Install pizone
 
-# Changing Mac Address
+* download
+* unzip
+* create symlinks
 
-Note, on my machine I had to disable ifplugd for wlan0 interface, otherwise, I would get this error when changing the mac address.
+
+    sudo ln -s /home/pi/pizone/etc/pizone /etc/pizone
+    sudo ln -s /home/pi/pizone/bin/cmac /usr/local/bin/cmac
+    sudo ln -s /home/pi/pizone/bin/pizone /usr/local/bin/pizone
+    sudo ln -s /home/pi/pizone/etc/init.d/pizoned /etc/init.d/pizoned
+
+
+## Configuration
+
+### Edit Access List
+
+### Start on boot
+
+In order to have pizone automatically run when the Raspberry Pi boots up, run the following command:
+
+    sudo update-rc.d pizoned defaults
+
+Any errors or output from the service will be written to a log file at:
+
+    /var/log/pizone
+
+You can watch the logs in real time by running:
+
+    tail - f /var/log/pizone
+
+Note, the log is cleared each time the pizone service is run at boot.
+
+# Potential Issues
+
+## Error when trying to change Mac Address
+
+If you are seeing the following in the pizone log files:
 
     SIOCSIFHWADDR: Device or resource busy - you may need to down the interface
 
-    sudo vim /etc/default/ifplugd
+you may need to adjust the *ifplugd* daemon to not automatically load the *wlan0* interface.
+
+You can do this by opening the */etc/default/ifplugd* file and editing the two properties below:
+
     INTERFACES="eth0"
     HOTPLUG_INTERFACES="eth0"
 
-Then set it to start at boot:
 
-	sudo update-rc.d pizoned defaults
+Note, that once you make this change, you cannot hot swap the USB WiFi adapter, so make sure that it is plugged in when the Pi is booted up.
+
+One you have saved the changes, reboot the pi, and hopefully the issue is resolved.
+
+
+	
 
 
 # Restrict Clients which can connect

@@ -18,7 +18,7 @@
             return;
         }
         
-        system.updateAccessPoint(ssid, address, callback);(item.ssid, item.address,
+        system.updateAccessPoint(item.ssid, item.address,
             function (err, out) {
                 if (err) {
                     console.log(err, out);
