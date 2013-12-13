@@ -70,7 +70,7 @@
     
     var updateAPConf = function (ssid, callback) {
         
-        var _generateAPConf = function (data, callback) {
+        var _generateAPConf = function (err, data, callback) {
             var conf = createAPConf(ssid, data);
             callback(null, conf, callback);
         };
