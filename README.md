@@ -35,6 +35,21 @@ A Raspberry Pi based Nintendo Zone access point.
 
 ## Hardware
 
+Below is the hardware that I bought to set this up. Note, the links below are affiliate links (so I get a small amount when you purchase from them). If you don’t want to support the project, then just remove the affiliate ID in the URL.
+
+* [Raspberry Pi Model B](http://www.amazon.com/gp/product/B009SQQF9C/ref=as_li_ss_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=B009SQQF9C&linkCode=as2&tag=markmecom-20)
+* [SD Memory Card](ttp://www.amazon.com/gp/product/B007JRB0RY/ref=as_li_ss_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=B007JRB0RY&linkCode=as2&tag=markmecom-20) (4 gigs to be safe)
+* [UBS Wifi](http://www.amazon.com/gp/product/B007BWFXYS/ref=ox_ya_os_product)
+* [Case](http://www.amazon.com/gp/product/B00EDO46U4/ref=as_li_ss_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=B00EDO46U4&linkCode=as2&tag=markmecom-20)
+
+Note, I am using a USB Wifi Adapter (linked above) that uses Ralink RT5370 chipset which worked for me without having to install any additional drivers. However, these adapters are pretty cheap in general, and even if you buy two from the same place, you may get different chipsets.
+
+Depending on the Wifi adapter you get, you may need to do some additional configuration (install drivers) in order to get it to work.
+
+You can find a listing and discussion of Raspberry Pi and various USB WiFi adapters at:
+
+[http://elinux.org/RPi_USB_Wi-Fi_Adapters](http://elinux.org/RPi_USB_Wi-Fi_Adapters)
+
 ## Installation
 
 Install Raspbian from : [http://www.raspberrypi.org/downloads](http://www.raspberrypi.org/downloads)
@@ -84,18 +99,21 @@ in order to configure your raspberry pi to act as a wireless access point. We wi
 
 While not necessarily required, especially if you configure Bonjour (see below), it can be very useful to configure the raspberry pi with a static IP. This way, you can connect to it via a web browser or SSH at any time. This can be done on the raspberry pi, or via configuration in your router.
 
+Below is my `/etc/network/interfaces` network configuration file. This is after I have configured my Pi as an access point, and includes setting the ethernet connection to have a static IP that works on my network (you may need to use a different IP).
 
-
-/etc/network/interfaces
+Note, you only need to update this again if you want to give your Raspberry Pi a static IP.
 
 	auto lo
 
 	iface lo inet loopback
+
+	#ethernet
 	iface eth0 inet static
 	address 192.168.1.159
 	netmask 255.255.255.0
 	gateway 192.168.1.1
 
+	#wifi
 	iface wlan0 inet static
 	address 192.168.42.1
 	netmask 255.255.255.0
@@ -103,11 +121,6 @@ While not necessarily required, especially if you configure Bonjour (see below),
 	up iptables-restore < /etc/iptables.ipv4.nat
 
 I also bound the PI's ethernet MAC address to the ip address on my router.
-
-Follow direction here to set up pi as an access point
-http://elinux.org/RPI-Wireless-Hotspot
-
-You should now be able to start it, and connect to it as a hotspot named "attwifi". Make sure you can connect and can browse the internet before moving on.
 
 ### Bonjour
 
@@ -141,11 +154,9 @@ Finally, restart the service:
 
 You should now be able to reach the raspberry pi via Bonjour using the following name:
 
-raspberrypi.local
-
     pizone.local
 
-(Note, the bonjour name is based on the hostname that you set for the pi.
+Note, the bonjour name is based on the hostname that you set for the pi.
 
 To SSH into the raspberry pi:
 
