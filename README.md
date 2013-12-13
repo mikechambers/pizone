@@ -1,4 +1,260 @@
-PiZone
+pizone
 ======
 
 A Raspberry Pi based Nintendo Zone access point.
+
+# todo
+
+**OS Conf**
+
+* Install firewall (do last)
+* Block web access from wireless.
+
+**App Code / Configuration**
+
+* Create command line tool to control app (shuffle, load, reset, etc...)
+* Move cmd scripts to node code. start services when the script starts. have the script completely control the network stuff.
+* Check if we need to restart udhcp
+* Check if we need to restart hostapd when updating mac access list
+* Check if interface is up before we try to bring it up.
+* Should we require root access to run cmd script interface
+
+**Interface**
+
+* View current mac / ssid
+* View all
+* Add mac / ssid
+* Change current access point
+* View mac addresses that can connect
+* Add mac address that can connect to access point
+* Mac address change interval
+* Time to next change
+* Stop rotation (stay on current address / ssid)
+
+# Setup
+
+## Hardware
+
+## Installation
+
+Install Raspbian from : [http://www.raspberrypi.org/downloads](http://www.raspberrypi.org/downloads)
+
+The default username and password is:  
+
+**Username**: pi  
+**Password** : raspberry
+
+This configuration assumes that the username will stay the same. If you update it, make sure to note the new name if the user name is referenced below.
+
+By default, the root account does not have a root password, and thus you cannot log into root. I would suggest creating a root passed in order to be able to recover from any errors accidentally made from the shudders file. In general, you will not need to log into the root account, but instead will run commands will elevated privileges via the `sudo` command.
+
+In order to create a root account password, run:
+
+    sudo passwd
+
+The default root password for the image distribution is “pizoneroot”.
+
+Next, you should disable lot login via SSH:
+
+Edit `/etc/ssh/ssh_config` and make sure that the following option is set (if it doesn’t exist, you can add it):
+
+    PermitRootLogin no
+
+Next, run `raspi-config` (if it didn’t run automatically the first time you booted):
+
+    sudo raspi-config
+
+Set the hostname to “pizone”, and enable SSH.
+
+Note, for reference, you can find info on how to set the hostname outside of `raspi-config` [here](http://www.howtogeek.com/167195/how-to-change-your-raspberry-pi-or-other-linux-devices-hostname/).
+
+## Configure Access Point
+
+At this point, you should be able to boot into the raspberry pi and SSH in (hint, when the raspberry pi boots up, it prints its IP to the screen. More info below on how to configure the IP).
+
+Follow the directions at:
+
+[http://elinux.org/RPI-Wireless-Hotspot](http://elinux.org/RPI-Wireless-Hotspot)
+
+in order to configure your raspberry pi to act as a wireless access point. We will tweak some of the configurations, but before you move on, you should make sure that the raspberry pi is working as an access point, and you are able to connect to it, and get online through it.
+
+## Setup Network
+
+### IP Address
+
+While not necessarily required, especially if you configure Bonjour (see below), it can be very useful to configure the raspberry pi with a static IP. This way, you can connect to it via a web browser or SSH at any time. This can be done on the raspberry pi, or via configuration in your router.
+
+
+
+/etc/network/interfaces
+
+	auto lo
+
+	iface lo inet loopback
+	iface eth0 inet static
+	address 192.168.1.159
+	netmask 255.255.255.0
+	gateway 192.168.1.1
+
+	iface wlan0 inet static
+	address 192.168.42.1
+	netmask 255.255.255.0
+
+	up iptables-restore < /etc/iptables.ipv4.nat
+
+I also bound the PI's ethernet MAC address to the ip address on my router.
+
+Follow direction here to set up pi as an access point
+http://elinux.org/RPI-Wireless-Hotspot
+
+You should now be able to start it, and connect to it as a hotspot named "attwifi". Make sure you can connect and can browse the internet before moving on.
+
+### Bonjour
+
+Next, we want to setup Bonjour to make it easier to locate the raspberry pi on the network. This step is optional, especially if you give the pi a static IP (see below), but in general, it is useful.
+
+Run the following commands to install and un the avahi bonjour service:
+
+    sudo apt-get install avahi-daemon
+    sudo update-rc.d avahi-daemon defaults
+
+Next, edit `/etc/avahi/services/multiple.service` and enter the following:
+
+	<?xml version="1.0" standalone='no'?>
+	<!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+	<service-group>
+	        <name replace-wildcards="yes">%h</name>
+	        <service>
+	                <type>_device-info._tcp</type>
+	                <port>0</port>
+	                <txt-record>model=RackMac</txt-record>
+	        </service>
+	        <service>
+	                <type>_ssh._tcp</type>
+	                <port>22</port>
+	        </service>
+	</service-group>
+
+Finally, restart the service:
+
+    sudo service avahi-daemon restart
+
+You should now be able to reach the raspberry pi via Bonjour using the following name:
+
+raspberrypi.local
+
+    pizone.local
+
+(Note, the bonjour name is based on the hostname that you set for the pi.
+
+To SSH into the raspberry pi:
+
+    ssh pi@pizone.local
+
+Or to view in the browser (useful later):
+
+    http://pizone.local
+
+Note, Bonjour works without any configuration on Mac based machines. You can find information on running Bonjour on Windows at [http://www.apple.com/support/bonjour/](http://www.apple.com/support/bonjour/)
+
+
+# Changing Mac Address
+
+Note, on my machine I had to disable ifplugd for wlan0 interface, otherwise, I would get this error when changing the mac address.
+
+    SIOCSIFHWADDR: Device or resource busy - you may need to down the interface
+
+    sudo vim /etc/default/ifplugd
+    INTERFACES="eth0"
+    HOTPLUG_INTERFACES="eth0"
+
+Once you do this, you have to manually bring up the network at boot.
+
+Then set it to start at boot:
+
+	sudo update-rc.d pizoned defaults
+
+To change mac address
+
+	sudo ifconfig wlan0 down
+	sudo ifconfig wlan0 hw ether 4E:53:50:4F:4F:43
+	sudo ifconfig wlan0 up
+
+	sudo service hostapd restart
+	sudo service udhcpd restart
+
+checking for error
+
+    sudo cat /var/log/syslog | grep "hostapd\|udhcpd"
+
+
+# Restrict Clients which can connect
+http://hostap.epitest.fi/gitweb/gitweb.cgi?p=hostap.git;a=blob_plain;f=hostapd/hostapd.conf
+http://wiki.excito.org/wiki/index.php/MAC_address_filter_for_wireless_network
+
+# Installation
+
+Copy scripts in pizone/bin to /usr/local/bin
+Copy files in pizone/etc/pizone to /etc/pizone
+
+You can also create symlinks to the scripts in a different location.
+
+    sudo ln -s /home/pi/pizone/etc/pizone /etc/pizone
+    sudo ln -s /home/pi/pizone/bin/cmac /usr/local/bin/cmac
+    sudo ln -s /home/pi/pizone/bin/pizone /usr/local/bin/pizone
+    sudo ln -s /home/pi/pizone/etc/init.d/pizoned /etc/init.d/pizoned
+
+
+
+# Backup
+
+Once you have a stable setup, you can shutoff the raspberry pi, remove the SD, and then create a backup image.
+
+http://ivanx.com/raspberrypi/
+http://www.raspberrypi.org/phpBB3/viewtopic.php?f=63&t=52938
+
+# Installing Node
+
+Install node for raspbery from "other files" at : http://nodejs.org/download/
+
+    sudo mkdir /opt/node
+    sudo cp -r node-v0.10.22-linux-arm-pi/* /opt/node
+    sudo ln -s /opt/node/bin/node /usr/local/bin/node
+    sudo ln -s /opt/node/bin/npm /usr/local/bin/npm
+
+Install the required modules
+    sudo npm install request
+    sudo npm install node-static
+
+
+#Node Refactoring
+
+* Managing address list, storage, adding, removing, sorting, etc...
+* (Maybe) one that manages IO for address list?
+* One that manages calling cmac / HW (change, status, etc...)
+* one for http server
+* one for routing requests
+
+We have have static instance modules that maintain their state, so we dont have to manually pass everything around!
+
+General philopshy is to pass actions (functions) not things (objects)
+
+so main sets up router functions, that get passed to server handler.
+
+#Random stuff
+
+	{ stack: [Getter/Setter],
+	  arguments: undefined,
+	  type: undefined,
+	  message: 'ENOENT, No such file or directory \'/doesnt/exist\'',
+	  errno: 2,
+	  code: 'ENOENT',
+	  path: '/doesnt/exist' }
+
+
+	Disable ifplugd
+	Change in /etc/default/ifplugd, to this -
+	INTERFACES="eth0"
+	HOTPLUG_INTERFACES="eth0"
+	ARGS="-q -f -u0 -d10 -w -I"
+	SUSPEND_ACTION="stop"
