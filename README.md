@@ -18,6 +18,7 @@ A Raspberry Pi based Nintendo Zone access point.
 * Check if we need to restart hostapd when updating mac access list
 * Check if interface is up before we try to bring it up.
 * Should we require root access to run cmd script interface
+* Need to figure out how to handle node module installs and path. Do we include them in the repository?
 
 **Interface**
 
@@ -198,12 +199,6 @@ In order to confirm that node is running, run the following command:
 This should output the version number:
 
     v0.10.22
-
-Next, install the node modules require by pizone:
-
-    sudo npm install request
-    sudo npm install node-static
-    sudo npm install async
 
 
 ### Install pizone
