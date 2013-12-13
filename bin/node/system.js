@@ -71,8 +71,10 @@
     var updateAPConf = function (ssid, callback) {
         
         var _generateAPConf = function (err, data, callback) {
+            
+            console.log("_generateAPConf", err, data);
             var conf = createAPConf(ssid, data);
-            callback(null, conf, callback);
+            callback(null, conf);
         };
         
         //todo: do we need to restart restartUDHCPD (it is slow)
