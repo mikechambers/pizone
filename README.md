@@ -174,19 +174,6 @@ Then set it to start at boot:
 
 	sudo update-rc.d pizoned defaults
 
-To change mac address
-
-	sudo ifconfig wlan0 down
-	sudo ifconfig wlan0 hw ether 4E:53:50:4F:4F:43
-	sudo ifconfig wlan0 up
-
-	sudo service hostapd restart
-	sudo service udhcpd restart
-
-checking for error
-
-    sudo cat /var/log/syslog | grep "hostapd\|udhcpd"
-
 
 # Restrict Clients which can connect
 http://hostap.epitest.fi/gitweb/gitweb.cgi?p=hostap.git;a=blob_plain;f=hostapd/hostapd.conf
@@ -228,18 +215,6 @@ Install the required modules
 
 
 #Node Refactoring
-
-* Managing address list, storage, adding, removing, sorting, etc...
-* (Maybe) one that manages IO for address list?
-* One that manages calling cmac / HW (change, status, etc...)
-* one for http server
-* one for routing requests
-
-We have have static instance modules that maintain their state, so we dont have to manually pass everything around!
-
-General philopshy is to pass actions (functions) not things (objects)
-
-so main sets up router functions, that get passed to server handler.
 
 #Random stuff
 
