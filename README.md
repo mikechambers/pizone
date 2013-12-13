@@ -71,7 +71,7 @@ The default root password for the image distribution is “pizoneroot”.
 
 Next, you should disable lot login via SSH:
 
-Edit `/etc/ssh/ssh_config` and make sure that the following option is set (if it doesn’t exist, you can add it):
+Edit `/etc/ssh/sshd_config` and make sure that the following option is set (if it doesn’t exist, you can add it):
 
     PermitRootLogin no
 

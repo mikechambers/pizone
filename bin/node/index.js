@@ -34,7 +34,6 @@
         
         address_manager.load(
             function () {
-                daemon.start();
                 
                 if (config.ENABLE_API_SERVICE) {
                     var route = require("./router.js");
@@ -46,6 +45,7 @@
                     static_server.start();
                 }
                 
+                daemon.start();
             },
             function (err) {
                 //what should we do here?

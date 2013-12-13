@@ -17,7 +17,7 @@
                 if (err) {
                     out = stderr;
                 }
-                
+
                 //note, if not error, err will be null
                 callback(err, out);
             }

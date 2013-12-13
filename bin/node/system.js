@@ -1,4 +1,4 @@
-/*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50 */
+/*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50, continue: true */
 /*global require, exports */
 
 (function () {
@@ -26,11 +26,11 @@
     };
     
     var createAPConf = function (ssid, template) {
-        template.replace("{{SSID}}", ssid);
-        return template;
+        var out = template.replace(/\{\{SSID\}\}/g, ssid);
+        return out;
     };
     
-    var writeAPConf = function (data, callback) {
+    var writeAPConfTemplate = function (data, callback) {
         fs.writeFile(config.HOSTAPD_CONF_PATH, data, callback);
     };
     
@@ -69,6 +69,30 @@
         );
     };
     
+    var formatAsyncOutput = function (arr) {
+    
+        if (!arr) {
+            return;
+        }
+        
+        var out = [];
+        
+        var len = arr.length;
+        
+        var tmp, i;
+        for (i = 0; i < len; i++) {
+            tmp = arr[i];
+            
+            if (!tmp) {
+                continue;
+            }
+            
+            out.push(tmp.trim());
+        }
+        
+        return out.join(os.EOL);
+    };
+    
     var updateAPConf = function (ssid, callback) {
         
         var _generateAPConf = function (data, callback) {
@@ -84,16 +108,13 @@
             [
                 loadAPConfTemplate,
                 _generateAPConf,
-                writeAPConf,
-                restartAPD,
-                restartUDHCPD
+                writeAPConfTemplate
             ],
             function (err, out) {
-                if (err) {
-                    callback(err);
-                    return;
-                }
-                callback(null, out);
+                out = formatAsyncOutput(out);
+                
+                //note: if not an error, err will be null
+                callback(err, out);
             }
         );
     };
@@ -119,15 +140,15 @@
                 function (callback) {process_runner.exec("ifconfig", [config.ACCESS_POINT_INTERFACE, "hw", "ether", address], callback); },
                 function (callback) {process_runner.exec("ifconfig", [config.ACCESS_POINT_INTERFACE, "up"], callback); },
                 function (callback) {updateAPConf(ssid, callback); },
-                restartAPD,
-                restartUDHCPD
+                restartAPD//,
+                //restartUDHCPD
+                
             ],
             function (err, out) {
-                if (err) {
-                    callback(err);
-                    return;
-                }
-                callback(null, out);
+                out = formatAsyncOutput(out);
+                
+                //note: if not an error, err will be null
+                callback(err, out);
             }
         );
     };

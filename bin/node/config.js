@@ -20,6 +20,7 @@
     
     exports.ENABLE_API_SERVICE = true;
     
+    exports.VERBOSE_OUTPUT = true;
     
     exports.HOSTAPD_CONF_PATH = "/etc/hostapd/hostapd.conf";
     exports.HOSTAPD_CONF_TEMPLATE_PATH = "/etc/pizone/hostapd.conf.template";

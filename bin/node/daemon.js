@@ -12,8 +12,11 @@
     
     var setAccessPoint = function (item) {
         
-        console.log(new Date().toISOString() + " : " + item.description + " : " + item.address + " : " + item.ssid);
-
+        if (config.VERBOSE_OUTPUT) {
+            console.log("Changing Access Point Information");
+            console.log(new Date().toISOString() + " : " + item.description + " : " + item.address + " : " + item.ssid);
+        }
+            
         if (config.TEST) {
             return;
         }
@@ -21,10 +24,15 @@
         system.updateAccessPoint(item.ssid, item.address,
             function (err, out) {
                 if (err) {
+                    console.log("Error changing Access Point : " + item.description + " : " + item.address + " : " + item.ssid);
                     console.log(err, out);
                     return;
                 }
-                console.log(out);
+                
+                if (config.VERBOSE_OUTPUT) {
+                    console.log(out);
+                    console.log("Complete");
+                }
             });
     };
     
