@@ -73,7 +73,9 @@
         
         var _generateAPConf = function (err, data, callback) {
             
-            console.log("_generateAPConf", err, data);
+            console.log("_generateAPConf");
+            console.log("err:", err);
+            console.log("data : ", data);
             var conf = createAPConf(ssid, data);
             callback(null, conf);
         };
