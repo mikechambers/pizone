@@ -30,6 +30,8 @@
     exports.HTTP_PORT = 80;
     exports.HTTP_SERVER_ROOT = "/etc/pizone/web/";
     
+    exports.API_BASE_PATH = "/api";
+    
     //file path to file containing JSON data of mac addresses
     exports.ADDRESS_DATA_PATH = "/etc/pizone/addresses.json";
     

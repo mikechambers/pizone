@@ -13,12 +13,15 @@ A Raspberry Pi based Nintendo Zone access point.
 **App Code / Configuration**
 
 * Create command line tool to control app (shuffle, load, reset, etc...)
-* Move cmd scripts to node code. start services when the script starts. have the script completely control the network stuff.
 * Check if we need to restart udhcp
 * Check if we need to restart hostapd when updating mac access list
-* Check if interface is up before we try to bring it up.
 * Should we require root access to run cmd script interface
-* add timestamps to log messages
+* On system commands, perhaps print stdout when it occurs, and not batched. That way it will show up better in log files.
+* bind web server to ethernet address?
+* combine static server and API server.
+* add server uptime
+* add api that returns time until refresh
+* add interval time
 
 **Interface**
 
@@ -275,26 +278,12 @@ You can also create symlinks to the scripts in a different location.
     sudo ln -s /home/pi/pizone/etc/init.d/pizoned /etc/init.d/pizoned
 
 
-
 # Backup
 
 Once you have a stable setup, you can shutoff the raspberry pi, remove the SD, and then create a backup image.
 
 http://ivanx.com/raspberrypi/
 http://www.raspberrypi.org/phpBB3/viewtopic.php?f=63&t=52938
-
-# Installing Node
-
-Install node for raspbery from "other files" at : http://nodejs.org/download/
-
-    sudo mkdir /opt/node
-    sudo cp -r node-v0.10.22-linux-arm-pi/* /opt/node
-    sudo ln -s /opt/node/bin/node /usr/local/bin/node
-    sudo ln -s /opt/node/bin/npm /usr/local/bin/npm
-
-Install the required modules
-    sudo npm install request
-    sudo npm install node-static
 
 
 #Node Refactoring

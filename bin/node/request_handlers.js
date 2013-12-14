@@ -38,10 +38,7 @@
     };
     
     /************** handlers ****************/
-    
-    var getInfo = function () {
-        //todo: return all items, current item, current index, refresh interval, time in ms until next item
-    };
+
     
     var getCurrentAddress = function (response) {
         var item = address_manager.getCurrentAddress();
@@ -58,6 +55,17 @@
         var items = address_manager.getAddresses();
         
         sendJSONResponse(response, items);
+    };
+    
+    var getInfo = function (response) {
+        //todo: return all items, current item, current index, refresh interval, time in ms until next item
+        
+        var out = {};
+        
+        out.currentItem = address_manager.getCurrentAddress();
+        out.addresses = address_manager.getAddresses();
+        
+        sendJSONResponse(response, out);
     };
     
     var handlers = {};
