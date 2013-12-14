@@ -73,13 +73,13 @@ In order to create a root account password, run:
 
 The default root password for the image distribution is “pizoneroot”.
 
-Next, you should disable lot login via SSH:
+Next, you should disable root login via SSH:
 
-Edit `/etc/ssh/sshd_config` and make sure that the following option is set (if it doesn’t exist, you can add it):
+Edit */etc/ssh/sshd_config* and make sure that the following option is set (if it doesn’t exist, you can add it):
 
     PermitRootLogin no
 
-Next, run `raspi-config` (if it didn’t run automatically the first time you booted):
+Next, run *raspi-config* (if it didn’t run automatically the first time you booted):
 
     sudo raspi-config
 
