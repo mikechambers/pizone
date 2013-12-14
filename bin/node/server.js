@@ -20,6 +20,8 @@
                     return;
                 }
                 
+                response.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:8080/getinfo');
+                
                 var pathname = url.parse(request.url).pathname;
                 route(handle, pathname, response);
                 winston.info("Request received : " + pathname);
