@@ -8,6 +8,7 @@
     var node_static = require("node-static");
     var http = require("http");
     var authentication = require("./authentication.js");
+    var winston = require("./logger").winston;
     
     var server;
     
@@ -33,7 +34,7 @@
             }
         );
         server.listen(config.HTTP_PORT);
-        console.log("pizone HTTP server initialized. Listening on port " + config.HTTP_PORT);
+        winston.info("pizone HTTP server initialized. Listening on port " + config.HTTP_PORT);
         
     };
 

@@ -6,6 +6,9 @@
     
     var fs = require("fs");
     var config = require("./config.js");
+    var winston = require("./logger").winston;
+    
+    
     var addresses = [];
     var index = 0;
     
@@ -73,8 +76,6 @@
         fs.readFile(config.ADDRESS_DATA_PATH, 'utf8', function (err, data) {
             
             if (err) {
-                console.log("loadAddressData");
-                console.log(err);
                 onErrorCallback(err);
                 return;
             }
@@ -82,7 +83,7 @@
             if (!data) {
                 //right now, we fail silently if there is no data (i.e. empty string)
                 //maybe we should fail and exit?
-                console.log("error");
+                winston.error("Error : Address data JSON is not in correct format.");
             } else {
                 try {
                     addresses = JSON.parse(data);
@@ -93,7 +94,7 @@
                     }
                     
                 } catch (e) {
-                    console.log("Error : Address data JSON is not in correct format.");
+                    winston.error("Error : Address data JSON is not in correct format.");
                     addresses = [];
                 }
             }

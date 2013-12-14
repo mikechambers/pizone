@@ -96,9 +96,6 @@
     var updateAPConf = function (ssid, callback) {
         
         var _generateAPConf = function (data, callback) {
-            
-            //console.log("_generateAPConf");
-            //console.log("data : ", data);
             var conf = createAPConf(ssid, data);
             callback(null, conf);
         };

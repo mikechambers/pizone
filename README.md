@@ -18,7 +18,7 @@ A Raspberry Pi based Nintendo Zone access point.
 * Check if we need to restart hostapd when updating mac access list
 * Check if interface is up before we try to bring it up.
 * Should we require root access to run cmd script interface
-* Need to figure out how to handle node module installs and path. Do we include them in the repository?
+* add timestamps to log messages
 
 **Interface**
 

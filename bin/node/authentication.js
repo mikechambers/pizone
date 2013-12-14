@@ -5,6 +5,7 @@
     "use strict";
     
     var config = require("./config.js");
+    var winston = require("./logger").winston;
     
     var decodeAuthHeader = function (authHeader) {
         //code based on : http://stackoverflow.com/a/5957629
@@ -59,7 +60,7 @@
     
     var checkAndHandleAuthentication = function (request, response) {
         if (!isAuthenticatedRequest(request)) {
-            console.log("Invalid authentication : ", request.headers, request.url, request.method, request.statusCode);
+            winston.info("Invalid authentication : ", request.headers, request.url, request.method, request.statusCode);
             sendNotAuthenticatedResponse(response);
             return false;
         }

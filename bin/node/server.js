@@ -8,6 +8,7 @@
     var config = require("./config.js");
     var url = require("url");
     var authentication = require("./authentication.js");
+    var winston = require("./logger").winston;
     
     var server;
     
@@ -21,13 +22,13 @@
                 
                 var pathname = url.parse(request.url).pathname;
                 route(handle, pathname, response);
-                console.log("Request received : " + pathname);
+                winston.info("Request received : " + pathname);
             }
         
         );
         server.listen(config.API_PORT);
         
-        console.log("pizone API service initialized. Listening on port " + config.API_PORT);
+        winston.info("pizone API service initialized. Listening on port " + config.API_PORT);
     };
     
     var stop = function (onClose) {

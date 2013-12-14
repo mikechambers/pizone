@@ -4,6 +4,8 @@
 (function () {
     "use strict";
     
+    var winston = require("./logger").winston;
+    
     var route = function (handle, pathname, response) {
         console.log("Route request received : " + pathname);
         
@@ -11,7 +13,7 @@
         if (typeof handle[pathname] === "function") {
             handle[pathname](response);
         } else {
-            console.log("No request handlers found for " + pathname);
+            winston.info("No request handlers found for " + pathname);
             response.writeHead(404, {"Content-Type": "text/plain"});
             response.write("404 Not Found.");
             response.end();

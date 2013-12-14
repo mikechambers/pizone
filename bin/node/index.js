@@ -10,17 +10,19 @@
 
 (function () {
     "use strict";
-
+    
     var config = require("./config.js");
     var daemon = require("./daemon.js");
     var server = require("./server.js");
     var static_server = require("./static_server.js");
     var address_manager = require("./address_manager.js");
+    var winston = require("./logger").winston;
+    
     
     var main = function () {
         
         if (config.TEST) {
-            console.log("Running in test mode.");
+            winston.info("Running in test mode.");
         }
             
         
@@ -50,7 +52,7 @@
             function (err) {
                 //what should we do here?
                 //right now we error and exit
-                console.log("Error : main : cannot load adddress data. Aborting.");
+                winston.error("Error : main : cannot load adddress data. Aborting.");
                 process.exit(1);
             },
             true
