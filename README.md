@@ -181,14 +181,12 @@ pizone requires [node.js](http://nodejs.org) to be installed, as well as a numbe
 
 The current version of pizone has been tested on node.js version [v0.10.22](http://nodejs.org/dist/v0.10.22/node-v0.10.22-linux-arm-pi.tar.gz).
 
-Download node for Raspberry Pi from “Other release files" link on the bottom of the page at:
+Download node for Raspberry Pi from “Other release files" link on: [http://nodejs.org/download/](http://nodejs.org/download/). NOTE: You need a version that is compiled for "linux-arm". Newer versions of node may not be readily available.
 
-[http://nodejs.org/download/](http://nodejs.org/download/)
-
-Once downloaded, run the following commands:
+Once downloaded, extract the contents of node and link libraries to the appropriate places. The following commands will work for v0.10.22:
 
     sudo mkdir /opt/node
-    tar xvzf ode-v0.10.22-linux-arm-pi.tar.gz
+    sudo tar xvzf node-v0.10.22-linux-arm-pi.tar.gz
     sudo cp -r node-v0.10.22-linux-arm-pi/* /opt/node
     sudo ln -s /opt/node/bin/node /usr/local/bin/node
     sudo ln -s /opt/node/bin/npm /usr/local/bin/npm
