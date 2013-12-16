@@ -204,16 +204,22 @@ This should output the version number:
 
 ### Install pizone
 
-* download
-* unzip
-* create symlinks
+1. Download PiZone (NOTE: Github seems to block wget downloads)
+2. Unzip
 
+```
+    sudo unzip pizone-master.zip pizone-master/* -d /home/pi  # Unzip default download of Pizone from Github
+    sudo mv /home/pi/pizone-master /home/pi/pizone  # Rename extracted directory
+```
 
+3. Create symlinks
+
+```
     sudo ln -s /home/pi/pizone/etc/pizone /etc/pizone
     sudo ln -s /home/pi/pizone/bin/cmac /usr/local/bin/cmac
     sudo ln -s /home/pi/pizone/bin/pizone /usr/local/bin/pizone
     sudo ln -s /home/pi/pizone/etc/init.d/pizoned /etc/init.d/pizoned
-
+```
 
 ## Configuration
 
