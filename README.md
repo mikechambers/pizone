@@ -309,3 +309,10 @@ http://www.raspberrypi.org/phpBB3/viewtopic.php?f=63&t=52938
 	HOTPLUG_INTERFACES="eth0"
 	ARGS="-q -f -u0 -d10 -w -I"
 	SUSPEND_ACTION="stop"
+	
+## Debug commands
+* iwconfig - info about current access point
+* iw - info about wifi device
+* iwconfig wlan0 essid "TEST" - might be able to use to change SSID without rebooting.
+* lsusb - find the driver being used.
+* sudo cat /var/log/syslog | grep "hostapd\|udhcpd" - errors with hostapd / udhcpd
