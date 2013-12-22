@@ -47,7 +47,8 @@
 					return;
                 }
                 
-				tmp = data; //convert to number
+                //todo: this is wrong
+				tmp = parseInt(data, 10); //convert to number
                 out = formatTempOutput(tmp);
                 
 				callback(null, out);
