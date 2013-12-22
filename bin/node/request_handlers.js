@@ -6,6 +6,7 @@
     
     var address_manager = require("./address_manager.js");
     var config = require("./config.js");
+    var system = require("./system.js");
     
     var jsonHeader = {"Content-Type": "application/json"};
     
@@ -65,7 +66,16 @@
         out.currentItem = address_manager.getCurrentAddress();
         out.addresses = address_manager.getAddresses();
         
-        sendJSONResponse(response, out);
+        system.getCPUTemp(
+            function (err, temp) {
+                out.systemInfo = {};
+                if (!err) {
+                    out.systemInfo = temp;
+                }
+                
+                sendJSONResponse(response, out);
+            }
+        );
     };
     
     var handlers = {};

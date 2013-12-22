@@ -8,6 +8,11 @@
         return !!address.match(/^([0-9A-F]{2}[:\-]){5}([0-9A-F]{2})$/g);
     };
     
+	var celsiusToFarenheit = function (temp) {
+		return (1.8 * temp) + 32;
+	};
+
+	exports.celsiusToFarenheit = celsiusToFarenheit;
     exports.isValidMacAddress = isValidMacAddress;
     
 }());

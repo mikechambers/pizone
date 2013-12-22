@@ -20,6 +20,8 @@
     
     exports.ENABLE_API_SERVICE = true;
     
+	exports.USE_CELCIUS = false;
+
     exports.VERBOSE_OUTPUT = true;
     
     exports.HOSTAPD_CONF_PATH = "/etc/hostapd/hostapd.conf";

@@ -11,6 +11,56 @@
     var fs = require("fs");
     var os = require("os");
     
+    var formatTempOutput = function (temp) {
+        
+        temp = temp / 1000;
+        var out = {};
+        
+        if (!config.USE_CELCIUS) {
+            temp = utils.celsiusToFarenheit(temp);
+        }
+        
+        temp = Math.ceil(temp);
+        
+        out.cpuTemp = temp;
+        out.tempScale = (config.USE_CELCIUS) ? "celcius" : "farenheit";
+        
+        return out;
+    };
+    
+	var getCPUTemp = function (callback) {
+	
+        var out = {};
+		var tmp;
+		if (config.TEST) {
+			tmp = 54072;
+
+            out = formatTempOutput(tmp);
+            callback(null, out);
+			return;
+		}
+		
+		fs.readFile("sys/class/thermal/thermal_zone0/temp", {encoding: "ascii"},
+			function (err, data) {
+				if (err) {
+					callback(err);
+					return;
+                }
+                
+				tmp = data; //convert to number
+                out = formatTempOutput(tmp);
+                
+				callback(null, out);
+			});
+		
+		//trip point
+		//trip_point_0_temp
+	
+	};
+	
+	var getGPUTemp = function (callback) {
+	};
+
     var restartUDHCPD = function (callback) {
         //service udhcpd restart 2>&1 >/dev/null
         process_runner.exec("service", ["udhcpd", "restart"], callback);
@@ -150,5 +200,6 @@
         );
     };
     
+    exports.getCPUTemp = getCPUTemp;
     exports.updateAccessPoint = updateAccessPoint;
 }());
