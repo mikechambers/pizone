@@ -10,6 +10,7 @@
     var utils = require("./utils.js");
     var fs = require("fs");
     var os = require("os");
+    var winston = require("./logger").winston;
     
     var formatTempOutput = function (temp) {
         
@@ -43,9 +44,12 @@
 		fs.readFile("sys/class/thermal/thermal_zone0/temp", {encoding: "ascii"},
 			function (err, data) {
 				if (err) {
+                    winston.error("Error Reading System Temp");
 					callback(err);
 					return;
                 }
+                
+                winston.info(data);
                 
                 //todo: this is wrong
 				tmp = parseInt(data, 10); //convert to number
