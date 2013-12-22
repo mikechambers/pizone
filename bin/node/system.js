@@ -41,7 +41,7 @@
 			return;
 		}
 		
-		fs.readFile("sys/class/thermal/thermal_zone0/temp", {encoding: "ascii"},
+		fs.readFile("/sys/class/thermal/thermal_zone0/temp", {encoding: "ascii"},
 			function (err, data) {
 				if (err) {
                     winston.error("Error Reading System Temp");
