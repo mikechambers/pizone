@@ -22,6 +22,7 @@ A Raspberry Pi based Nintendo Zone access point.
 * add server uptime
 * add api that returns time until refresh
 * add interval time
+* fix date timezone for log
 
 **Interface**
 
@@ -34,6 +35,7 @@ A Raspberry Pi based Nintendo Zone access point.
 * Mac address change interval
 * Time to next change
 * Stop rotation (stay on current address / ssid)
+* add handlebars for templating
 
 # Setup
 
