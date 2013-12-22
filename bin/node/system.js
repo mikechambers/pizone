@@ -45,11 +45,10 @@
 			function (err, data) {
 				if (err) {
                     winston.error("Error Reading System Temp");
+                    winston.error(err);
 					callback(err);
 					return;
                 }
-                
-                winston.info(data);
                 
                 //todo: this is wrong
 				tmp = parseInt(data, 10); //convert to number
