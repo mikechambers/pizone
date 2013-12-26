@@ -34,6 +34,10 @@
             }
             $("#currentCPUTemp").text(temp);
             
+            if(currentItem.timeSinceUpdate) {
+                $("#timeToNextAP").text((data.config.refreshInterval - currentItem.timeSinceUpdate) + " ms");
+            }
+            
             var source = $("#ap-list-template").html();
             var apListTemplate = Handlebars.compile(source); 
             var html = apListTemplate({"addresses":data.addresses, "currentAddress": currentItem.address});

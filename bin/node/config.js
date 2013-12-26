@@ -28,7 +28,7 @@
     exports.HOSTAPD_CONF_TEMPLATE_PATH = "/etc/pizone/hostapd.conf.template";
     exports.HOSTAPD_RESTRICTED_ADDRESSES_PATH = "/etc/hostapd/hostapd.access";
     
-    exports.API_PORT = 8080;
+    //exports.API_PORT = 8080;
     exports.HTTP_PORT = 80;
     exports.HTTP_SERVER_ROOT = "/etc/pizone/web/";
     

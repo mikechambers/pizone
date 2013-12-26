@@ -7,6 +7,7 @@
     var address_manager = require("./address_manager.js");
     var config = require("./config.js");
     var system = require("./system.js");
+    var daemon = require("./daemon.js");
     
     var jsonHeader = {"Content-Type": "application/json"};
     
@@ -64,6 +65,16 @@
         var out = {};
         
         out.currentItem = address_manager.getCurrentAddress();
+        
+        
+        //return (new Date()).getTime() - lastUpdated.getTime();
+        
+        var _d = daemon.getLastUpdated();
+        
+        if (_d) {
+            out.currentItem.timeSinceUpdate = (new Date()).getTime() - _d.getTime();
+        }
+        
         out.addresses = address_manager.getAddresses();
         
         system.getCPUTemp(
@@ -72,6 +83,13 @@
                 if (!err) {
                     out.systemInfo = temp;
                 }
+                
+                var c = {
+                    "refreshInterval" : config.REFRESH_INTERVAL,
+                    "isTestMode" : config.TEST
+                };
+                
+                out.config = c;
                 
                 //refreshInterval
                 //timeToRefresh

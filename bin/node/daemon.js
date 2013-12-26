@@ -10,13 +10,19 @@
     var winston = require("./logger").winston;
 
     var intervalId;
+    var lastUpdated;
+    
+    var getLastUpdated = function () {
+        return lastUpdated;
+    };
     
     var setAccessPoint = function (item) {
         
         winston.info("Changing Access Point Information");
         winston.info(item.description + " : " + item.address + " : " + item.ssid);
 
-            
+        
+        lastUpdated = new Date();
         if (config.TEST) {
             return;
         }
@@ -65,6 +71,7 @@
         setAccessPoint(address_manager.getFirstAddress());
     };
     
+    exports.getLastUpdated = getLastUpdated;
     exports.resume = resume;
     exports.start = start;
     exports.reset = reset;
