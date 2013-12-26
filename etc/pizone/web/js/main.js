@@ -5,7 +5,17 @@
     "use strict";
     
     var main = function () {
-        console.log("loaded");
+        
+        var Handlebars = window.Handlebars;
+        
+        Handlebars.registerHelper("getStatus", function(address, currentAddress ) {
+            if(address == currentAddress)
+            {
+                return "active";
+            } else {
+                return "";
+            }
+        });        
         
         $.ajax({
             url: "/api/getinfo",
@@ -13,7 +23,7 @@
             dataType : "json"
         }).done(function (data) {
             var currentItem = data.currentItem;
-            console.log(currentItem);
+
             $("#currentAddressSSID").text(currentItem.ssid);
             $("#currentAddressDescription").text(currentItem.description);
             $("#currentAddressMac").text(currentItem.address);
@@ -24,6 +34,11 @@
             }
             $("#currentCPUTemp").text(temp);
             
+            var source = $("#ap-list-template").html();
+            var apListTemplate = Handlebars.compile(source); 
+            var html = apListTemplate({"addresses":data.addresses, "currentAddress": currentItem.address});
+            
+             $("#ap-list-body").append(html);
         });
     };
     

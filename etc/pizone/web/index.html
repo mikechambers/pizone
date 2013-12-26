@@ -69,7 +69,7 @@
             </dl>
         </p>
         
-        <h2>Next Access Points</h2>
+        <h2>Access Points</h2>
         
         <table class="table">
         <thead>
@@ -79,27 +79,7 @@
             <th>Mac Address</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>Description</td>
-            <td>attwifi</td>
-            <td>00:00:00:00:00:00:00</td>
-          </tr>
-          <tr class="active">
-            <td>Description</td>
-            <td>attwifi</td>
-            <td>00:00:00:00:00:00:00</td>
-          </tr>
-          <tr>
-            <td>Description</td>
-            <td>attwifi</td>
-            <td>00:00:00:00:00:00:00</td>
-          </tr>
-          <tr>
-            <td>Description</td>
-            <td>attwifi</td>
-            <td>00:00:00:00:00:00:00</td>
-          </tr>
+        <tbody id="ap-list-body">
         </tbody>
         </table>
         
@@ -112,7 +92,18 @@
       </div>
     </div>
 
-
+currentAddress
+    <!-- HandleBars AP List Template //-->
+    <script id="ap-list-template" type="text/x-handlebars-template">
+        {{#each addresses}}
+        <tr class="{{{getStatus this.address ../currentAddress}}}">
+            <td>{{this.description}}</td>
+            <td>{{this.ssid}}</td>
+            <td>{{this.address}}</td>
+        </tr>
+        {{/each}}
+    </script>
+    
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
