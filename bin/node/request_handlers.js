@@ -73,6 +73,9 @@
                     out.systemInfo = temp;
                 }
                 
+                //refreshInterval
+                //timeToRefresh
+                
                 sendJSONResponse(response, out);
             }
         );

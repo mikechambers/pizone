@@ -44,7 +44,7 @@
     //interval in milliseconds that address will be rotated
     exports.REFRESH_INTERVAL = 1000 * 60 * 10;//10 minutes
     if (test) {
-        exports.REFRESH_INTERVAL = 1000 * 2;//2 seconds
+        exports.REFRESH_INTERVAL = 1000 * 5;//2 seconds
         exports.PRETTY_PRINT_JSON_RESPONSE = true;
     }
     
