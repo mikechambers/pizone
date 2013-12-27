@@ -1,5 +1,5 @@
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50 */
-/*global window, $ */
+/*global window, $, setInterval, clearInterval */
 
 (function () {
     "use strict";
@@ -43,8 +43,7 @@
         return out;
     };
     
-    var main = function () {
-                
+    var loadMainInfo = function () {
         $.ajax({
             url: "/api/getinfo",
             cache: false,
@@ -68,6 +67,24 @@
             if (currentItem.timeSinceUpdate) {
                 var _t = (data.config.refreshInterval - currentItem.timeSinceUpdate);
 
+                var intervalCount = 0;
+                var intervalId = setInterval(
+                    function () {
+                        intervalCount++;
+                        
+                        var tLeft = _t - intervalCount * 1000;
+                        
+                        if (tLeft <= 0) {
+                            clearInterval(intervalId);
+                            loadMainInfo();
+                            return;
+                        }
+                        
+                        $("#timeToNextAP").text(formatTime(tLeft));
+                    },
+                    1000
+                );
+                
                 $("#timeToNextAP").text(formatTime(_t));
             }
             
@@ -75,8 +92,13 @@
             var apListTemplate = Handlebars.compile(source);
             var html = apListTemplate({"addresses": data.addresses, "currentAddress": currentItem.address});
             
+            $("#ap-list-body").empty();
             $("#ap-list-body").append(html);
         });
+    };
+    
+    var main = function () {
+        loadMainInfo();
     };
     
     window.onload = main;
