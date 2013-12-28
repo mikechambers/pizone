@@ -25,7 +25,7 @@
     exports.VERBOSE_OUTPUT = true;
     
     exports.HOSTAPD_CONF_PATH = "/etc/hostapd/hostapd.conf";
-    exports.CACHE_HOSTAPD_CONF = true;
+    
     //exports.HOSTAPD_CONF_TEMPLATE_PATH = "/etc/pizone/hostapd.conf.template";
     exports.HOSTAPD_RESTRICTED_ADDRESSES_PATH = "/etc/hostapd/hostapd.access";
     
@@ -42,11 +42,14 @@
     exports.PRETTY_PRINT_JSON_RESPONSE = true;
     exports.JSON_PRETTY_PRINT_DELIMETER = "\t";
     
+    exports.CACHE_HOSTAPD_CONF = true;
+    
     //interval in milliseconds that address will be rotated
     exports.REFRESH_INTERVAL = 1000 * 60 * 10;//10 minutes
     if (test) {
         exports.REFRESH_INTERVAL = 1000 * 60 * 2;//2 seconds
         exports.PRETTY_PRINT_JSON_RESPONSE = true;
+        exports.CACHE_HOSTAPD_CONF = false;
     }
     
     exports.TEST = test;

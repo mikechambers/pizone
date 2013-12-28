@@ -20,7 +20,6 @@
         
         winston.info("Changing Access Point Information");
         winston.info(item.description + " : " + item.address + " : " + item.ssid);
-
         
         lastUpdated = new Date();
         if (config.TEST) {
