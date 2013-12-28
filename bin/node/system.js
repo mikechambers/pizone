@@ -75,12 +75,83 @@
         process_runner.exec("service", ["hostapd", "restart"], callback);
     };
     
+    var apConfFileContent;
+    
+    /*
+        loads hostapd.conf file into memory
+        Once file is loaded, is is stored in memory
+        and not reloaded again until pizone is restarted.
+        
+        Caching can be disabled by setting the
+        CACHE_HOSTAPD_CONF variable in config.js
+    */
     var loadAPConfTemplate = function (callback) {
-        fs.readFile(config.HOSTAPD_CONF_TEMPLATE_PATH, {encoding: "utf8"}, callback);
+        
+        if (config.CACHE_HOSTAPD_CONF && apConfFileContent) {
+            callback(null, apConfFileContent);
+            return;
+        }
+        
+        fs.readFile(config.HOSTAPD_CONF_PATH, {encoding: "utf8"},
+            function (err, data) {
+                if (err) {
+                    callback(err);
+                    return;
+                }
+                
+                if (!data || !data.length) {
+                    callback("Error loading hostapd.conf file. File was empty. " + config.HOSTAPD_CONF_PATH);
+                    //todo : we might want to do a system exit here
+                    return;
+                }
+                
+                if (config.CACHE_HOSTAPD_CONF) {
+                    apConfFileContent = data;
+                }
+                
+                callback(null, data);
+            }
+            );
     };
     
-    var createAPConf = function (ssid, template) {
-        var out = template.replace(/\{\{SSID\}\}/g, ssid);
+    var _createSSIDConfString = function (ssid) {
+        return "ssid=" + ssid;
+    };
+    
+    var createAPConf = function (ssid, confFileContent) {
+        
+        var confArr = confFileContent.split(os.EOL);
+        
+        var len = confArr.length;
+        var i;
+        var line;
+        var found = false;
+        
+        //loop through each line of the conf file, looking for the 
+        //one that specifies the ssid
+        for (i = 0; i < len; i++) {
+            line = confArr[i];
+            
+            //see if lines starts with "ssid " or "ssid="
+            if (line.indexOf("ssid ") === 0 || line.indexOf("ssid=") === 0) {
+                
+                //if so, rewrite line to specify the new ssid
+                confArr[i] = _createSSIDConfString(ssid);
+                
+                //note, we don't stop looping in case the ssid is specified multiple
+                //times for some reason
+                found = true;
+            }
+        }
+        
+        //if for some reason, the conf file doesnt specify the ssid
+        //we add it at the end
+        if (!found) {
+            confArr.push(_createSSIDConfString(ssid));
+        }
+        
+        //create a return a string of the conf file.
+        var out = confArr.join(os.EOL);
         return out;
     };
     

@@ -318,3 +318,13 @@ http://www.raspberrypi.org/phpBB3/viewtopic.php?f=63&t=52938
 * iwconfig wlan0 essid "TEST" - might be able to use to change SSID without rebooting.
 * lsusb - find the driver being used.
 * sudo cat /var/log/syslog | grep "hostapd\|udhcpd" - errors with hostapd / udhcpd
+
+
+sudo hostapd_cli wps_config "foo" OPEN NONE ""
+
+ctrl_interface=/var/run/hostapd
+ctrl_interface_group=0
+
+http://www.freebsd.org/cgi/man.cgi?query=hostapd_cli&sektion=8
+http://ftp.netbsd.org/pub/NetBSD/NetBSD-current/src/external/bsd/wpa/dist/hostapd/README-WPS
+http://hostap.epitest.fi/gitweb/gitweb.cgi?p=hostap.git;a=blob_plain;f=hostapd/hostapd.conf
