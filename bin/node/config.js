@@ -18,6 +18,7 @@
     
     exports.ACCESS_POINT_INTERFACE = "wlan0";
     
+    //todo: is this still used anywhere?
     exports.ENABLE_API_SERVICE = true;
     
 	exports.USE_CELCIUS = false;
@@ -26,10 +27,8 @@
     
     exports.HOSTAPD_CONF_PATH = "/etc/hostapd/hostapd.conf";
     
-    //exports.HOSTAPD_CONF_TEMPLATE_PATH = "/etc/pizone/hostapd.conf.template";
     exports.HOSTAPD_RESTRICTED_ADDRESSES_PATH = "/etc/hostapd/hostapd.access";
-    
-    //exports.API_PORT = 8080;
+
     exports.HTTP_PORT = 80;
     exports.HTTP_SERVER_ROOT = "/etc/pizone/web/";
     
