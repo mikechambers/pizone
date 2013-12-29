@@ -43,14 +43,18 @@
         return out;
     };
     
+    var displayErrorMessage = function (msg) {
+        $("#errorField").text(msg);
+        $(".alert").show();
+    };
+    
     var hasErrorAndHandle = function (data) {
         
         if (!data.error) {
             return false;
         }
         
-        $("#errorField").text(data.error);
-        $(".alert").show();
+        displayErrorMessage(data.error);
         
         return true;
     };
@@ -60,6 +64,8 @@
             url: "/api/getinfo",
             cache: false,
             dataType : "json"
+        }).fail(function (jqXHR, textStatus) {
+            displayErrorMessage("Error loading data.");
         }).done(function (data) {
             
             if (hasErrorAndHandle(data)) {
@@ -126,6 +132,8 @@
             url: "/api/getlogs",
             cache: false,
             dataType : "json"
+        }).fail(function (jqXHR, textStatus) {
+            displayErrorMessage("Error loading data.");
         }).done(function (data) {
             
             if (hasErrorAndHandle(data)) {
