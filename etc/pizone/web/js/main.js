@@ -131,6 +131,9 @@
     };
     
     var main = function () {
+        
+        console.log(window.location.hash);
+        
         $("#logRefreshButton").click(
             function () {
                 loadLogFiles();
