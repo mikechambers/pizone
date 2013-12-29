@@ -43,12 +43,32 @@
         return out;
     };
     
+    var hasErrorAndHandle = function (data) {
+        
+        if (!data.error) {
+            return false;
+        }
+        
+        $("#errorField").text(data.error);
+        $(".alert").show();
+        
+        return true;
+    };
+    
     var loadMainInfo = function () {
         $.ajax({
             url: "/api/getinfo",
             cache: false,
             dataType : "json"
         }).done(function (data) {
+            
+            if (hasErrorAndHandle(data)) {
+                //note : if an error occurs here, the interval stops and
+                //we won't automatically check again. Need to figure out how
+                //to handle this
+                return;
+            }
+            
             var currentItem = data.currentItem;
 
             $("#currentAddressSSID").text(currentItem.ssid);
@@ -108,6 +128,11 @@
             dataType : "json"
         }).done(function (data) {
             
+            if (hasErrorAndHandle(data)) {
+                btn.button('reset');
+                return;
+            }
+                        
             //this puts an atificial delay on it, so the button doesnt
             //flash / twitch super fast
             setTimeout(function () {
@@ -126,13 +151,19 @@
                     field[0].scrollHeight - field.height()
                 );
                 
-            }, 500);
+            }, 250);
         });
     };
     
     var main = function () {
         
-        console.log(window.location.hash);
+        $(".alert").hide();
+        
+        $("#alertCloseButton").click(
+            function () {
+                $(".alert").hide();
+            }
+        );
         
         $("#logRefreshButton").click(
             function () {
