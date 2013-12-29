@@ -98,19 +98,19 @@
     };
     
     var loadLogFiles = function () {
+        
         $.ajax({
             url: "/api/getlogs",
             cache: false,
             dataType : "json"
         }).done(function (data) {
-            
-        }
+            $("#logfield").text(data.logs);
+        });
     };
     
     var main = function () {
-        
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-            if(e.target == $("#logButton")[0]) {
+            if (e.target === $("#logButton")[0]) {
                 loadLogFiles();
             }
 

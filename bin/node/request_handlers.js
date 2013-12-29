@@ -8,6 +8,7 @@
     var config = require("./config.js");
     var system = require("./system.js");
     var daemon = require("./daemon.js");
+    var winston = require("./logger").winston;
     
     var jsonHeader = {"Content-Type": "application/json"};
     
@@ -59,6 +60,31 @@
         sendJSONResponse(response, items);
     };
     
+    var getLogs = function (response) {
+        
+        var options = {
+            from: new Date() - 24 * 60 * 60 * 1000,
+            until: new Date(),
+            limit: 10,
+            start: 0,
+            order: 'desc'
+            //fields: ['message']
+        };
+        
+        //
+        // Find items logged between today and yesterday.
+        //
+        winston.query(options, function (err, results) {
+            if (err) {
+                console.log("error", err);
+                throw err;
+            }
+        
+            console.log(results);
+            sendJSONResponse(response, {"logs": "Hi im a log"});
+        });
+    };
+    
     var getInfo = function (response) {
         //todo: return all items, current item, current index, refresh interval, time in ms until next item
         
@@ -103,6 +129,7 @@
     handlers["/CURRENTADDRESS"] = getCurrentAddress;
     handlers["/ADDRESSES"] = getAddresses;
     handlers["/GETINFO"] = getInfo;
+    handlers["/GETLOGS"] = getLogs;
     
     exports.handlers = handlers;
 }());
