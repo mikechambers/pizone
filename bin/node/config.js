@@ -44,6 +44,12 @@
     
     exports.CACHE_HOSTAPD_CONF = true;
     
+    exports.MAX_LOG_ITEMS = 500;
+    
+    //see : http://momentjs.com/docs/#/displaying/format/
+    //10/Oct/2000:13:55:36 -0700
+    exports.TIMESTAMP_FORMAT = "DD/MMM/YYYY HH:MM:SS ZZ";
+    
     //interval in milliseconds that address will be rotated
     exports.REFRESH_INTERVAL = 1000 * 60 * 10;//10 minutes
     if (test) {

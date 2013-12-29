@@ -77,11 +77,12 @@
         winston.query(options, function (err, results) {
             if (err) {
                 console.log("error", err);
-                throw err;
+                
+                sendJSONResponse(response, generateError("Could not query logs."));
+                return;
             }
         
-            console.log(results);
-            sendJSONResponse(response, {"logs": "Hi im a log"});
+            sendJSONResponse(response, {"logs": results.memoryLogger});
         });
     };
     

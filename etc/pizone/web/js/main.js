@@ -1,5 +1,5 @@
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50 */
-/*global window, $, setInterval, clearInterval */
+/*global window, $, setInterval, clearInterval, setTimeout */
 
 (function () {
     "use strict";
@@ -99,16 +99,44 @@
     
     var loadLogFiles = function () {
         
+        var btn = $("#logRefreshButton");
+        btn.button('loading');
+        
         $.ajax({
             url: "/api/getlogs",
             cache: false,
             dataType : "json"
         }).done(function (data) {
-            $("#logfield").text(data.logs);
+            
+            //this puts an atificial delay on it, so the button doesnt
+            //flash / twitch super fast
+            setTimeout(function () {
+                btn.button('reset');
+                
+                var logs = data.logs;
+                
+                if (!logs) {
+                    return;
+                }
+    
+                var field = $("#logfield");
+                field.text(logs.join("\n"));
+                
+                field.scrollTop(
+                    field[0].scrollHeight - field.height()
+                );
+                
+            }, 500);
         });
     };
     
     var main = function () {
+        $("#logRefreshButton").click(
+            function () {
+                loadLogFiles();
+            }
+        );
+        
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             if (e.target === $("#logButton")[0]) {
                 loadLogFiles();
