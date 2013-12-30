@@ -114,12 +114,11 @@
             );
     };
     
-    var _createSSIDConfString = function (ssid) {
-        return "ssid=" + ssid;
+    var lineIsPropValue = function (property, line) {
+        return (line.indexOf(property + " ") === 0 || line.indexOf(property + "=") === 0);
     };
     
-    var createAPConf = function (ssid, confFileContent) {
-        
+    var updateConfProperty = function (property, value, confFileContent) {
         var confArr = confFileContent.split(os.EOL);
         
         var len = confArr.length;
@@ -133,10 +132,10 @@
             line = confArr[i];
             
             //see if lines starts with "ssid " or "ssid="
-            if (line.indexOf("ssid ") === 0 || line.indexOf("ssid=") === 0) {
+            if (lineIsPropValue(property, line)) {
                 
                 //if so, rewrite line to specify the new ssid
-                confArr[i] = _createSSIDConfString(ssid);
+                confArr[i] = property + "=" + value;
                 
                 //note, we don't stop looping in case the ssid is specified multiple
                 //times for some reason
@@ -147,12 +146,53 @@
         //if for some reason, the conf file doesnt specify the ssid
         //we add it at the end
         if (!found) {
-            confArr.push(_createSSIDConfString(ssid));
+            confArr.push(property + "=" + value);
         }
         
         //create a return a string of the conf file.
         var out = confArr.join(os.EOL);
         return out;
+    };
+    
+    var removeConfProperty = function (property, confFileContent) {
+        var confArr = confFileContent.split(os.EOL);
+        
+        var len = confArr.length;
+        var i;
+        var line;
+        
+        //loop through each line of the conf file, looking for the 
+        //one that specifies the ssid
+        for (i = 0; i < len; i++) {
+            line = confArr[i];
+            
+            //see if lines starts with "ssid " or "ssid="
+            if (lineIsPropValue(property, line)) {
+                confArr.splice(i, 1);
+                break;
+            }
+        }
+        
+        //create a return a string of the conf file.
+        var out = confArr.join(os.EOL);
+        return out;
+    };
+    
+    var updateAccessRestriction = function (enable, confFileContent) {
+        
+        var out;
+        
+        if (enable) {
+            out = updateConfProperty("macaddr_acl", "1", confFileContent);
+        } else {
+            out = removeConfProperty("macaddr_acl");
+        }
+        
+        return out;
+    };
+    
+    var updateSSID = function (ssid, confFileContent) {
+        return updateConfProperty("ssid", ssid, confFileContent);
     };
     
     var writeAPConfTemplate = function (data, callback) {
@@ -221,7 +261,7 @@
     var updateAPConf = function (ssid, callback) {
         
         var _generateAPConf = function (data, callback) {
-            var conf = createAPConf(ssid, data);
+            var conf = updateSSID(ssid, data);
             callback(null, conf);
         };
         
