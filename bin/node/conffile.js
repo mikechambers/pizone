@@ -97,6 +97,7 @@
         return out;
     };
     
+    exports.getConfProperty = getConfProperty;
     exports.removeConfProperty = removeConfProperty;
     exports.updateConfProperty = updateConfProperty;
     
