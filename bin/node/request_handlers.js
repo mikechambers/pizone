@@ -96,8 +96,11 @@
                 sendJSONResponse(response, generateError("Could not read access control property from hostapd.conf file."));
                 return;
             }
+            
             var out = {};
             out.accessRestrictionEnable = enabled;
+            
+            console.log("getAccessInfo : enabled : " + enabled);
             
             if (enabled) {
                 accesslist.getItems(function (err, items) {
@@ -110,6 +113,8 @@
                     
                     sendJSONResponse(response, out);
                 });
+            } else {
+                sendJSONResponse(response, out);
             }
         });
         
