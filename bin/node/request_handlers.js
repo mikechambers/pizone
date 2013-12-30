@@ -9,6 +9,8 @@
     var system = require("./system.js");
     var daemon = require("./daemon.js");
     var winston = require("./logger").winston;
+    var hostapdconf = require("./hostapdconf.js");
+    var accesslist = require("./accesslist.js");
     
     var jsonHeader = {"Content-Type": "application/json"};
     
@@ -87,6 +89,33 @@
         });
     };
     
+    var getAccessInfo = function (response) {
+        
+        hostapdconf.getIsAccessRestrictionEnabled(function (err, enabled) {
+            if (err) {
+                sendJSONResponse(response, generateError("Could not read access control property from hostapd.conf file."));
+                return;
+            }
+            var out = {};
+            out.accessRestrictionEnable = enabled;
+            
+            if (enabled) {
+                accesslist.getItems(function (err, items) {
+                    if (err) {
+                        sendJSONResponse(response, generateError("Could not read access control list : " + config.RESTRICTED_ADDRESSES_PATH));
+                        return;
+                    }
+                    
+                    out.restrictedAccessList = items;
+                    
+                    sendJSONResponse(response, out);
+                });
+            }
+        });
+        
+        
+    };
+    
     var getInfo = function (response) {
         //todo: return all items, current item, current index, refresh interval, time in ms until next item
         
@@ -132,6 +161,7 @@
     handlers["/ADDRESSES"] = getAddresses;
     handlers["/GETINFO"] = getInfo;
     handlers["/GETLOGS"] = getLogs;
+    handlers["/GETACCESSINFO"] = getAccessInfo;
     
     exports.handlers = handlers;
 }());

@@ -26,7 +26,20 @@
             }
             );
     };
+    
+    var getIsAccessRestrictionEnabled = function (callback) {
         
+        loadConfFile(function (err, confFileContent) {
+            
+            var prop;
+            if (!err) {
+                prop = (conffile.getConfProperty("macaddr_acl") === 1);
+            }
+             
+            callback(err, prop);
+        });
+    };
+    
     var updateAccessRestriction = function (enable, confFileContent) {
         
         var out;
@@ -51,6 +64,7 @@
         });
     };
     
+    exports.getIsAccessRestrictionEnabled = getIsAccessRestrictionEnabled;
     exports.updateSSID = updateSSID;
     exports.writeConfFile = writeConfFile;
     exports.updateAccessRestriction = updateAccessRestriction;
