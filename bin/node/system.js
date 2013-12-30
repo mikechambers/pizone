@@ -10,6 +10,8 @@
     var utils = require("./utils.js");
     var fs = require("fs");
     var os = require("os");
+    var conffile = require("./conffile.js");
+    var hostapdconf = require("./hostapdconf.js");
     var winston = require("./logger").winston;
     
     var formatTempOutput = function (temp) {
@@ -56,10 +58,6 @@
                 
 				callback(null, out);
 			});
-		
-		//trip point
-		//trip_point_0_temp
-	
 	};
 	
 	var getGPUTemp = function (callback) {
@@ -75,133 +73,6 @@
         process_runner.exec("service", ["hostapd", "restart"], callback);
     };
     
-    var apConfFileContent;
-    
-    /*
-        loads hostapd.conf file into memory
-        Once file is loaded, is is stored in memory
-        and not reloaded again until pizone is restarted.
-        
-        Caching can be disabled by setting the
-        CACHE_HOSTAPD_CONF variable in config.js
-    */
-    var loadAPConfTemplate = function (callback) {
-        
-        if (config.CACHE_HOSTAPD_CONF && apConfFileContent) {
-            callback(null, apConfFileContent);
-            return;
-        }
-        
-        fs.readFile(config.HOSTAPD_CONF_PATH, {encoding: "utf8"},
-            function (err, data) {
-                if (err) {
-                    callback(err);
-                    return;
-                }
-                
-                if (!data || !data.length) {
-                    callback("Error loading hostapd.conf file. File was empty. " + config.HOSTAPD_CONF_PATH);
-                    //todo : we might want to do a system exit here
-                    return;
-                }
-                
-                if (config.CACHE_HOSTAPD_CONF) {
-                    apConfFileContent = data;
-                }
-                
-                callback(null, data);
-            }
-            );
-    };
-    
-    var lineIsPropValue = function (property, line) {
-        return (line.indexOf(property + " ") === 0 || line.indexOf(property + "=") === 0);
-    };
-    
-    var updateConfProperty = function (property, value, confFileContent) {
-        var confArr = confFileContent.split(os.EOL);
-        
-        var len = confArr.length;
-        var i;
-        var line;
-        var found = false;
-        
-        //loop through each line of the conf file, looking for the 
-        //one that specifies the ssid
-        for (i = 0; i < len; i++) {
-            line = confArr[i];
-            
-            //see if lines starts with "ssid " or "ssid="
-            if (lineIsPropValue(property, line)) {
-                
-                //if so, rewrite line to specify the new ssid
-                confArr[i] = property + "=" + value;
-                
-                //note, we don't stop looping in case the ssid is specified multiple
-                //times for some reason
-                found = true;
-            }
-        }
-        
-        //if for some reason, the conf file doesnt specify the ssid
-        //we add it at the end
-        if (!found) {
-            confArr.push(property + "=" + value);
-        }
-        
-        //create a return a string of the conf file.
-        var out = confArr.join(os.EOL);
-        return out;
-    };
-    
-    var removeConfProperty = function (property, confFileContent) {
-        var confArr = confFileContent.split(os.EOL);
-        
-        var len = confArr.length;
-        var i;
-        var line;
-        
-        //loop through each line of the conf file, looking for the 
-        //one that specifies the ssid
-        for (i = 0; i < len; i++) {
-            line = confArr[i];
-            
-            //see if lines starts with "ssid " or "ssid="
-            if (lineIsPropValue(property, line)) {
-                confArr.splice(i, 1);
-                break;
-            }
-        }
-        
-        //create a return a string of the conf file.
-        var out = confArr.join(os.EOL);
-        return out;
-    };
-    
-    var updateAccessRestriction = function (enable, confFileContent) {
-        
-        var out;
-        
-        if (enable) {
-            out = updateConfProperty("macaddr_acl", "1", confFileContent);
-        } else {
-            out = removeConfProperty("macaddr_acl");
-        }
-        
-        return out;
-    };
-    
-    var updateSSID = function (ssid, confFileContent) {
-        return updateConfProperty("ssid", ssid, confFileContent);
-    };
-    
-    var writeAPConfTemplate = function (data, callback) {
-        fs.writeFile(config.HOSTAPD_CONF_PATH, data, callback);
-    };
-    
-    //todo: we may want to cache the results of this, so we dont have to read a file
-    //everytime this api is called. Might not be a big deal though, since there should only ever be
-    //one person accessing the site
     var readRestrictedAccessList = function (callback) {
         fs.readFile(config.HOSTAPD_RESTRICTED_ADDRESSES_PATH,
                     {encoding: "utf8"},
@@ -261,16 +132,16 @@
     var updateAPConf = function (ssid, callback) {
         
         var _generateAPConf = function (data, callback) {
-            var conf = updateSSID(ssid, data);
+            var conf = hostapdconf.updateSSID(ssid, data);
             callback(null, conf);
         };
         
         //todo: do we need to restart restartUDHCPD (it is slow)
         async.waterfall(
             [
-                loadAPConfTemplate,
+                hostapdconf.loadConfFile,
                 _generateAPConf,
-                writeAPConfTemplate
+                hostapdconf.writeConfFile
             ],
             function (err, out) {
                 out = formatAsyncOutput(out);
@@ -303,7 +174,6 @@
                 function (callback) {process_runner.exec("ifconfig", [config.ACCESS_POINT_INTERFACE, "up"], callback); },
                 function (callback) {updateAPConf(ssid, callback); },
                 restartAPD//,
-                //restartUDHCPD
                 
             ],
             function (err, out) {

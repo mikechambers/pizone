@@ -26,8 +26,7 @@
     exports.VERBOSE_OUTPUT = true;
     
     exports.HOSTAPD_CONF_PATH = "/etc/hostapd/hostapd.conf";
-    
-    exports.HOSTAPD_RESTRICTED_ADDRESSES_PATH = "/etc/hostapd/hostapd.access";
+    exports.RESTRICTED_ADDRESSES_PATH = "/etc/hostapd/hostapd.access";
 
     exports.HTTP_PORT = 80;
     exports.HTTP_SERVER_ROOT = "/etc/pizone/web/";
@@ -41,7 +40,7 @@
     exports.PRETTY_PRINT_JSON_RESPONSE = true;
     exports.JSON_PRETTY_PRINT_DELIMETER = "\t";
     
-    exports.CACHE_HOSTAPD_CONF = true;
+    exports.CACHE_CONF_FILES = true;
     
     exports.MAX_LOG_ITEMS = 500;
     
@@ -54,7 +53,7 @@
     if (test) {
         exports.REFRESH_INTERVAL = 1000 * 60 * 2;//2 seconds
         exports.PRETTY_PRINT_JSON_RESPONSE = true;
-        exports.CACHE_HOSTAPD_CONF = false;
+        exports.CACHE_CONF_FILES = false;
     }
     
     exports.TEST = test;
