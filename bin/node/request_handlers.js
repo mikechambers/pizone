@@ -76,7 +76,6 @@
         //
         winston.query(options, function (err, results) {
             if (err) {
-                console.log("error", err);
                 winston.error("Error querying winston");
                 winston.error(err);
                 

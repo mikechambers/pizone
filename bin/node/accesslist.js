@@ -9,28 +9,16 @@
     var winston = require("./logger").winston;
     var os = require("os");
     var utils = require("./utils.js");
-    
-    var items;
-    
+
     var getItems = function (callback) {
-        
-        if (config.CACHE_CONF_FILES && items) {
-            callback(null, items);
-            return;
-        }
-        
+
         fs.exists(config.RESTRICTED_ADDRESSES_PATH, function (exists) {
             
             if (!exists) {
                 winston.info("RESTRICTED_ADDRESSES_PATH does not exist. Using default empty list. : " +
                              config.RESTRICTED_ADDRESSES_PATH);
-                
-                var _tmp = [];
-                if (config.CACHE_CONF_FILES) {
-                    items = _tmp;
-                }
                     
-                callback(null, _tmp);
+                callback(null, []);
                 return;
             }
             
@@ -51,10 +39,6 @@
                         _items[i] = _items[i].trim();
                     }
                     
-                    if (config.CACHE_CONF_FILES) {
-                        items = _items;
-                    }
-                    
                     callback(null, _items);
                 }
                 );
@@ -69,11 +53,6 @@
         var data = macaddresses.join(os.EOL);
         
         fs.writeFile(config.RESTRICTED_ADDRESSES_PATH, data, function (err, out) {
-
-            if (!err && config.CACHE_CONF_FILES) {
-                items = macaddresses;
-            }
-            
             callback(err, macaddresses);
         });
     };
@@ -96,12 +75,6 @@
     };
     
     var removeItems = function (macaddresses, callback) {
-        
-        if (items) {
-            _removeItems(macaddresses, items, callback);
-            return;
-        }
-        
         getItems(
             function (err, _items) {
                 
@@ -135,10 +108,6 @@
     };
     
     var addItems = function (macaddresses, callback) {
-        if (items) {
-            _addItems(macaddresses, items, callback);
-            return;
-        }
         
         getItems(
             function (err, _items) {
