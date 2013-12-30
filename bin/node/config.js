@@ -40,8 +40,6 @@
     exports.PRETTY_PRINT_JSON_RESPONSE = true;
     exports.JSON_PRETTY_PRINT_DELIMETER = "\t";
     
-    exports.CACHE_CONF_FILES = true;
-    
     exports.MAX_LOG_ITEMS = 500;
     
     //see : http://momentjs.com/docs/#/displaying/format/
@@ -53,7 +51,6 @@
     if (test) {
         exports.REFRESH_INTERVAL = 1000 * 60 * 2;//2 seconds
         exports.PRETTY_PRINT_JSON_RESPONSE = true;
-        exports.CACHE_CONF_FILES = false;
     }
     
     exports.TEST = test;

@@ -6,23 +6,8 @@
     var config = require("./config.js");
     var fs = require("fs");
     var conffile = require("./conffile.js");
-    
-    var apConfFileContent;
-    
-    /*
-        loads hostapd.conf file into memory
-        Once file is loaded, is is stored in memory
-        and not reloaded again until pizone is restarted.
-        
-        Caching can be disabled by setting the
-        CACHE_CONF_FILES variable in config.js
-    */
+
     var loadConfFile = function (callback) {
-        
-        if (config.CACHE_CONF_FILES && apConfFileContent) {
-            callback(null, apConfFileContent);
-            return;
-        }
         
         fs.readFile(config.HOSTAPD_CONF_PATH, {encoding: "utf8"},
             function (err, data) {
@@ -35,10 +20,6 @@
                     callback("Error loading hostapd.conf file. File was empty. " + config.HOSTAPD_CONF_PATH);
                     //todo : we might want to do a system exit here
                     return;
-                }
-                
-                if (config.CACHE_CONF_FILES) {
-                    apConfFileContent = data;
                 }
                 
                 callback(null, data);
@@ -66,11 +47,6 @@
     var writeConfFile = function (data, callback) {
         
         fs.writeFile(config.HOSTAPD_CONF_PATH, data, function (err, out) {
-            
-            if (!err && config.CACHE_CONF_FILES) {
-                apConfFileContent = data;
-            }
-            
             callback(err, out);
         });
     };
