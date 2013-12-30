@@ -7,6 +7,7 @@
     var Handlebars = window.Handlebars;
     
     Handlebars.registerHelper("getStatus", function (address, currentAddress) {
+        
         if (address === currentAddress) {
             return "active";
         } else {
@@ -116,6 +117,8 @@
             
             var source = $("#ap-list-template").html();
             var apListTemplate = Handlebars.compile(source);
+            
+            
             var html = apListTemplate({"addresses": data.addresses, "currentAddress": currentItem.address});
             
             $("#ap-list-body").empty();

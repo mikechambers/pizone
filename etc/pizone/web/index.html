@@ -140,9 +140,9 @@
       <p class="text-muted">&#169; 2013 Mike Chambers. <a href=
       "https://github.com/mikechambers/pizone">pizone on GitHub</a>.</p>
     </div>
-  </div><!-- HandleBars AP List Template //-->
-  <script id="ap-list-template" type="text/x-handlebars-template">
-<![CDATA[
+  </div>
+    <!-- HandleBars AP List Template //-->
+    <script id="ap-list-template" type="text/x-handlebars-template">
         {{#each addresses}}
         <tr class="{{{getStatus this.address ../currentAddress}}}">
             <td>{{this.description}}</td>
@@ -150,10 +150,10 @@
             <td>{{this.address}}</td>
         </tr>
         {{/each}}
-  ]]>
-  </script><!-- Bootstrap core JavaScript
-    ================================================== -->
-  <!-- Placed at the end of the document so the pages load faster -->
+    </script>
+      
+<!-- Bootstrap core JavaScript ================================================== //-->
+  <!-- Placed at the end of the document so the pages load faster //-->
   <script src="/js/jquery-1.10.2.min.js" type="text/javascript">
 </script><script src="/dist/js/bootstrap.min.js" type="text/javascript">
 </script><script src="/js/handlebars.min-v1.2.0.js" type="text/javascript">
