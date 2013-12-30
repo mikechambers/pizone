@@ -24,7 +24,7 @@
 	exports.USE_CELCIUS = false;
 
     exports.VERBOSE_OUTPUT = true;
-    
+
     exports.HOSTAPD_CONF_PATH = "/etc/hostapd/hostapd.conf";
     exports.RESTRICTED_ADDRESSES_PATH = "/etc/hostapd/hostapd.access";
 

@@ -33,6 +33,9 @@
             
             var prop;
             if (!err) {
+                
+console.log("macaddr_acl" + conffile.getConfProperty("macaddr_acl", confFileContent));
+                
                 prop = (conffile.getConfProperty("macaddr_acl", confFileContent) === 1);
             }
              
