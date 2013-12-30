@@ -33,7 +33,7 @@
             
             var prop;
             if (!err) {
-                prop = (conffile.getConfProperty("macaddr_acl") === 1);
+                prop = (conffile.getConfProperty("macaddr_acl", confFileContent) === 1);
             }
              
             callback(err, prop);
