@@ -67,7 +67,7 @@
         
         fs.writeFile(config.HOSTAPD_CONF_PATH, data, function (err, out) {
             
-            if (config.CACHE_CONF_FILES) {
+            if (!err && config.CACHE_CONF_FILES) {
                 apConfFileContent = data;
             }
             

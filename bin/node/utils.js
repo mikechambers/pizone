@@ -12,6 +12,20 @@
 		return (1.8 * temp) + 32;
 	};
 
+    var createValueHash = function (arr) {
+        
+        var len = arr.length;
+        var i;
+        
+        var out = {};
+        for (i = 0; i < len; i++) {
+            out[arr[i]] = true;
+        }
+        
+        return out;
+    };
+    
+    exports.createValueHash = createValueHash;
 	exports.celsiusToFarenheit = celsiusToFarenheit;
     exports.isValidMacAddress = isValidMacAddress;
     

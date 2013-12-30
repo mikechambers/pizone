@@ -8,20 +8,9 @@
     var fs = require("fs");
     var winston = require("./logger").winston;
     var os = require("os");
+    var utils = require("./utils.js");
     
     var items;
-    
-    var removeItem = function (macaddress, callback) {
-    };
-    
-    var removeItems = function (macaddresses, callback) {
-    };
-    
-    var addItem = function (macaddress, callback) {
-    };
-    
-    var writeAccessList = function (items, callback) {
-    };
     
     var getItems = function (callback) {
         
@@ -71,8 +60,101 @@
                 );
         });
     };
+        
+    var writeAccessList = function (macaddresses, callback) {
+        //write array to file.
+        //if success and we need to cache, then cache files
+        //return items in callback
+        
+        var data = macaddresses.join(os.EOL);
+        
+        fs.writeFile(config.RESTRICTED_ADDRESSES_PATH, data, function (err, out) {
+
+            if (!err && config.CACHE_CONF_FILES) {
+                items = macaddresses;
+            }
+            
+            callback(err, macaddresses);
+        });
+    };
     
-    exports.removeItem = removeItem;
-    exports.addItem = addItem;
+    var _removeItems = function (macaddresses, _items, callback) {
+        var hash = utils.createValueHash(macaddresses);
+        var len = _items.length;
+        var i;
+        
+        var out = [];
+        
+        for (i = 0; i < len; i++) {
+            
+            if (!hash[_items[0]]) {
+                out.push(_items[0]);
+            }
+        }
+        
+        writeAccessList(out, callback);
+    };
+    
+    var removeItems = function (macaddresses, callback) {
+        
+        if (items) {
+            _removeItems(macaddresses, items, callback);
+            return;
+        }
+        
+        getItems(
+            function (err, _items) {
+                
+                if (err) {
+                    callback(err);
+                    return;
+                }
+                
+                _removeItems(macaddresses, _items, callback);
+            }
+        );
+        
+    };
+    
+    var _addItems = function (macaddresses, _items, callback) {
+        
+        var hash = utils.createValueHash(_items);
+        var len = macaddresses.length;
+        var i;
+        
+        var out = _items;
+        
+        for (i = 0; i < len; i++) {
+            
+            if (!hash[macaddresses[0]]) {
+                out.push(macaddresses[0]);
+            }
+        }
+        
+        writeAccessList(out, callback);
+    };
+    
+    var addItems = function (macaddresses, callback) {
+        if (items) {
+            _addItems(macaddresses, items, callback);
+            return;
+        }
+        
+        getItems(
+            function (err, _items) {
+                
+                if (err) {
+                    callback(err);
+                    return;
+                }
+                
+                _addItems(macaddresses, _items, callback);
+            }
+        );
+    };
+    
+
+    exports.removeItems = removeItems;
+    exports.addItems = addItems;
     exports.getItems = getItems;
 }());
