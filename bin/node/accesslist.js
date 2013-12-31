@@ -9,9 +9,9 @@
     var winston = require("./logger").winston;
     var os = require("os");
     var utils = require("./utils.js");
-
+        
     var getItems = function (callback) {
-
+        
         fs.exists(config.RESTRICTED_ADDRESSES_PATH, function (exists) {
             
             if (!exists) {
@@ -39,6 +39,7 @@
                         _items[i] = _items[i].trim();
                     }
                     
+                    _items = utils.removeEmptyItems(_items);
                     callback(null, _items);
                 }
                 );

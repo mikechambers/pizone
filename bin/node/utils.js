@@ -25,6 +25,25 @@
         return out;
     };
     
+    var removeEmptyItems = function (arr) {
+        var out = [];
+        
+        var len = arr.length;
+        var i;
+        var item;
+        
+        for (i = 0; i < len; i++) {
+            item = arr[i];
+            
+            if (item.trim().length) {
+                out.push(item);
+            }
+        }
+        
+        return out;
+    };
+    
+    exports.removeEmptyItems = removeEmptyItems;
     exports.createValueHash = createValueHash;
 	exports.celsiusToFarenheit = celsiusToFarenheit;
     exports.isValidMacAddress = isValidMacAddress;

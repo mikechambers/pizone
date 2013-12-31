@@ -26,7 +26,7 @@
     exports.VERBOSE_OUTPUT = true;
 
     exports.HOSTAPD_CONF_PATH = "/etc/hostapd/hostapd.conf";
-    exports.RESTRICTED_ADDRESSES_PATH = "/etc/hostapd/hostapd.access";
+    exports.RESTRICTED_ADDRESSES_PATH = "/etc/hostapd/hostapd.accept";
 
     exports.HTTP_PORT = 80;
     exports.HTTP_SERVER_ROOT = "/etc/pizone/web/";

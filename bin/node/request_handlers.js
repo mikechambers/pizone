@@ -100,8 +100,6 @@
             var out = {};
             out.accessRestrictionEnable = enabled;
             
-            console.log("getAccessInfo : enabled : " + enabled);
-            
             if (enabled) {
                 accesslist.getItems(function (err, items) {
                     if (err) {
