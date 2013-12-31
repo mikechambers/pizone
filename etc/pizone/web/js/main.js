@@ -116,6 +116,8 @@
             }
             
             var source = $("#ap-list-template").html();
+            
+            //todo: cache this
             var apListTemplate = Handlebars.compile(source);
             
             
@@ -123,6 +125,37 @@
             
             $("#ap-list-body").empty();
             $("#ap-list-body").append(html);
+        });
+    };
+    
+    var loadAccessInfo = function () {
+        
+        $.ajax({
+            url: "/api/getaccessinfo",
+            cache: false,
+            dataType : "json"
+        }).fail(function (jqXHR, textStatus) {
+            displayErrorMessage("Error loading data.");
+        }).done(function (data) {
+            
+            if (hasErrorAndHandle(data)) {
+                return;
+            }
+            
+            var addresses = data.restrictedAccessList;
+            
+            $("#restrictAccessCheckBox").prop("checked", Boolean(data.accessRestrictionEnable));
+            
+            if (addresses.length) {
+                var source = $("#restrict-address-template").html();
+                
+                //todo: cache this
+                var restrictedTemplate = Handlebars.compile(source);
+                
+                var html = restrictedTemplate({"addresses": data.restrictedAccessList});
+                $("#restrict-address-body").empty();
+                $("#restrict-address-body").append(html);
+            }
         });
     };
     
@@ -185,8 +218,9 @@
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             if (e.target === $("#logButton")[0]) {
                 loadLogFiles();
+            } else if (e.target === $("#configButton")[0]) {
+                loadAccessInfo();
             }
-
         });
         
         loadMainInfo();

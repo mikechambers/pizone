@@ -35,7 +35,7 @@
         </div>
           <ul class="nav navbar-nav">
             <li class="active"><a href="#status" data-toggle="tab">Status</a></li>
-            <li><a href="#config" data-toggle="tab">Configuration</a></li>
+            <li><a href="#config" data-toggle="tab" id="configButton">Configuration</a></li>
             <li><a href="#logs" data-toggle="tab" id="logButton">Logs</a></li>
             <li><a href="#about" data-toggle="tab">About</a></li>
           </ul>
@@ -115,28 +115,34 @@
         <!--------- Config ------------->
         <div class="tab-pane" id="config">  
 
-
+            
+    <div class="row">
+        <div class="col-xs-6">
         <div class="panel panel-default">
             <!-- Default panel contents -->
+            
+
             <div class="panel-heading">Access Restriction</div>
                 <div class="panel-body">
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox">Only allow approved devices to connect
+                        <input type="checkbox" id="restrictAccessCheckBox">Only allow approved devices to connect
                     </label>
                 </div>
                     
                 <!-- Table -->
-                <table class="table">
+
+                <table class="table table-hover table-condensed">
                     <thead>
                         <tr>
-                        <th>Approved Devices</th>             
-                        <th></th>
+                        <th>#</th>             
+                        <th>Approved Devices</th>
                         </tr>
                     </thead>
                     <tbody id="restrict-address-body">
                     </tbody>
                 </table>
+      
                 
                 <div class="panel-footer">
                     <form class="form-inline" role="form">
@@ -155,7 +161,9 @@
             </div>
         </div>              
 
-      </div>
+            
+    </div></div>        
+    </div>
       <!--------- End Config ------------->          
           
           
@@ -202,8 +210,8 @@
     <script id="restrict-address-template" type="text/x-handlebars-template">
         {{#each addresses}}
         <tr>
-            <td>{{this.address}}</td>
-            <td></td>
+            <td><input type="checkbox" id=""></td>
+            <td>{{this}}</td>
         </tr>
         {{/each}}
     </script>
