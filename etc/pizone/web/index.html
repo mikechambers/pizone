@@ -112,6 +112,52 @@
         </div>
         <!--------- End Status ------------->
           
+        <!--------- Config ------------->
+        <div class="tab-pane" id="config">  
+
+
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">Access Restriction</div>
+                <div class="panel-body">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox">Only allow approved devices to connect
+                    </label>
+                </div>
+                    
+                <!-- Table -->
+                <table class="table">
+                    <thead>
+                        <tr>
+                        <th>Approved Devices</th>             
+                        <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="restrict-address-body">
+                    </tbody>
+                </table>
+                
+                <div class="panel-footer">
+                    <form class="form-inline" role="form">
+                        
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Mac Address</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="00:00:00:00:00:00" />
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-default">Add</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>              
+
+      </div>
+      <!--------- End Config ------------->          
+          
           
         <!--------- Logs ------------->
         <div class="tab-pane" id="logs">  
@@ -148,6 +194,16 @@
             <td>{{this.description}}</td>
             <td>{{this.ssid}}</td>
             <td>{{this.address}}</td>
+        </tr>
+        {{/each}}
+    </script>
+      
+<!-- HandleBars AP List Template //-->
+    <script id="restrict-address-template" type="text/x-handlebars-template">
+        {{#each addresses}}
+        <tr>
+            <td>{{this.address}}</td>
+            <td></td>
         </tr>
         {{/each}}
     </script>
