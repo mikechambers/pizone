@@ -4,6 +4,7 @@ pizone
 A Raspberry Pi based Nintendo Zone access point.
 
 Create by Mike Chambers (mikechambers@gmail.com)
+
 [https://github.com/mikechambers/pizone](https://github.com/mikechambers/pizone)
 
 Note, this project is not being actively developed.
@@ -72,7 +73,7 @@ The default username and password is:
 
 This configuration assumes that the username will stay the same. If you update it, make sure to note the new name if the user name is referenced below.
 
-By default, the root account does not have a root password, and thus you cannot log into root. I would suggest creating a root passed in order to be able to recover from any errors accidentally made from the shudders file. In general, you will not need to log into the root account, but instead will run commands will elevated privileges via the `sudo` command.
+By default, the root account does not have a root password, and thus you cannot log into root. I would suggest creating a root password in order to be able to recover from any errors accidentally made from the sudoers file. In general, you will not need to log into the root account, but instead will run commands with elevated privileges via the `sudo` command.
 
 In order to create a root account password, run:
 
