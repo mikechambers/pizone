@@ -7,54 +7,30 @@ Create by Mike Chambers (mikechambers@gmail.com)
 
 [https://github.com/mikechambers/pizone](https://github.com/mikechambers/pizone)
 
-Note, this project is not being actively developed.
+pizone creates a Ninendo Zone access point that has the cabilitiy of spoofing known access points around the world, allowing you to unlock location specific items, or make Street Pass contacts with people around the world.
 
-# todo
-
-**OS Conf**
-
-* Install firewall (do last)
-* Block web access from wireless.
-
-**App Code / Configuration**
-
-* Create command line tool to control app (shuffle, load, reset, etc...)
-* Check if we need to restart udhcp
-* Check if we need to restart hostapd when updating mac access list
-* Should we require root access to run cmd script interface
-* On system commands, perhaps print stdout when it occurs, and not batched. That way it will show up better in log files.
-* bind web server to ethernet address?
-* combine static server and API server.
-* add server uptime
-* add api that returns time until refresh
-* add interval time
-* fix date timezone for log
-
-**Interface**
-
-* View current mac / ssid
-* View all
-* Add mac / ssid
-* Change current access point
-* View mac addresses that can connect
-* Add mac address that can connect to access point
-* Mac address change interval
-* Time to next change
-* Stop rotation (stay on current address / ssid)
-* add handlebars for templating
+Note, this project is not being actively developed (although I am working to improve the documentation).
 
 # Setup
 
+There are a couple of steps to getting pizone to run:
+
+1. Configure Raspberry Pi to act as a wireless access point
+2. Install and configure NodeJS
+3. Install and run pizone
+
+You can find more detail info below, but the docs and instructions still need a lot of work.
+
 ## Hardware
 
-Below is the hardware that I bought to set this up. Note, the links below are affiliate links (so I get a small amount when you purchase from them). If you don’t want to support the project, then just remove the affiliate ID in the URL.
+Below is the hardware that I bought to set this up (and which has been tested with the current code). Note, the links below are affiliate links (so I get a small amount when you purchase from them). If you don’t want to support the project, then just remove the affiliate ID in the URL.
 
 * [Raspberry Pi Model B](http://www.amazon.com/gp/product/B009SQQF9C/ref=as_li_ss_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=B009SQQF9C&linkCode=as2&tag=markmecom-20)
 * [SD Memory Card](ttp://www.amazon.com/gp/product/B007JRB0RY/ref=as_li_ss_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=B007JRB0RY&linkCode=as2&tag=markmecom-20) (4 gigs to be safe)
 * [UBS Wifi](http://www.amazon.com/gp/product/B007BWFXYS/ref=ox_ya_os_product)
 * [Case](http://www.amazon.com/gp/product/B00EDO46U4/ref=as_li_ss_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=B00EDO46U4&linkCode=as2&tag=markmecom-20)
 
-Note, I am using a USB Wifi Adapter (linked above) that uses Ralink RT5370 chipset which worked for me without having to install any additional drivers. However, these adapters are pretty cheap in general, and even if you buy two from the same place, you may get different chipsets.
+Note, I am using a USB Wifi Adapter (linked above) that uses Ralink RT5370 chipset which worked for me without having to install any additional drivers. However, these adapters are pretty cheap in general, and even if you buy two from the same place, you may get different chipsets and thus different results.
 
 Depending on the Wifi adapter you get, you may need to do some additional configuration (install drivers) in order to get it to work.
 
@@ -104,6 +80,8 @@ Follow the directions at:
 [http://elinux.org/RPI-Wireless-Hotspot](http://elinux.org/RPI-Wireless-Hotspot)
 
 in order to configure your raspberry pi to act as a wireless access point. We will tweak some of the configurations, but before you move on, you should make sure that the raspberry pi is working as an access point, and you are able to connect to it, and get online through it.
+
+Note, pizone will automatically change the SSID, with the most common one being "attwifi".
 
 ## Setup Network
 
@@ -212,15 +190,15 @@ This should output the version number:
 
 ### Install pizone
 
-1. Download PiZone (NOTE: Github seems to block wget downloads)
-2. Unzip
+1. Clone pizone
 
-```
-    sudo unzip pizone-master.zip pizone-master/* -d /home/pi  # Unzip default download of Pizone from Github
-    sudo mv /home/pi/pizone-master /home/pi/pizone  # Rename extracted directory
-```
+```git clone https://github.com/mikechambers/pizone.git```
 
-3. Create symlinks
+The default install assumes pizone is found in:
+
+```/home/pi/pizone```
+
+2. Create symlinks
 
 ```
     sudo ln -s /home/pi/pizone/etc/pizone /etc/pizone
@@ -228,6 +206,16 @@ This should output the version number:
     sudo ln -s /home/pi/pizone/bin/pizone /usr/local/bin/pizone
     sudo ln -s /home/pi/pizone/etc/init.d/pizoned /etc/init.d/pizoned
 ```
+
+3. Start pizone
+
+```
+sudo /etc/init.d/pizoned start
+```
+
+4. Load configuration page. Once pizone is running, it will make a configuration site avaiable at the IP address that the Raspberry PI is connected on. Just load that IP in your browser, you should see the current status. The default admin username / password is pizone / pizone. You can change this in pizone/bin/node/config.js.
+
+5. Turn on 3DS, and assuming that you have configured your access point correctly, it should begin to make street pass connections. By default, it will change its Street Pass address every 10 minutes.
 
 ## Configuration
 
@@ -270,24 +258,9 @@ Note, that once you make this change, you cannot hot swap the USB WiFi adapter, 
 One you have saved the changes, reboot the pi, and hopefully the issue is resolved.
 
 
-	
-
-
 # Restrict Clients which can connect
 http://hostap.epitest.fi/gitweb/gitweb.cgi?p=hostap.git;a=blob_plain;f=hostapd/hostapd.conf
 http://wiki.excito.org/wiki/index.php/MAC_address_filter_for_wireless_network
-
-# Installation
-
-Copy scripts in pizone/bin to /usr/local/bin
-Copy files in pizone/etc/pizone to /etc/pizone
-
-You can also create symlinks to the scripts in a different location.
-
-    sudo ln -s /home/pi/pizone/etc/pizone /etc/pizone
-    sudo ln -s /home/pi/pizone/bin/cmac /usr/local/bin/cmac
-    sudo ln -s /home/pi/pizone/bin/pizone /usr/local/bin/pizone
-    sudo ln -s /home/pi/pizone/etc/init.d/pizoned /etc/init.d/pizoned
 
 
 # Backup
@@ -298,7 +271,39 @@ http://ivanx.com/raspberrypi/
 http://www.raspberrypi.org/phpBB3/viewtopic.php?f=63&t=52938
 
 
-#Node Refactoring
+# todo
+
+**OS Conf**
+
+* Install firewall (do last)
+* Block web access from wireless.
+
+**App Code / Configuration**
+
+* Create command line tool to control app (shuffle, load, reset, etc...)
+* Check if we need to restart udhcp
+* Check if we need to restart hostapd when updating mac access list
+* Should we require root access to run cmd script interface
+* On system commands, perhaps print stdout when it occurs, and not batched. That way it will show up better in log files.
+* bind web server to ethernet address?
+* combine static server and API server.
+* add server uptime
+* add api that returns time until refresh
+* add interval time
+* fix date timezone for log
+
+**Interface**
+
+* View current mac / ssid
+* View all
+* Add mac / ssid
+* Change current access point
+* View mac addresses that can connect
+* Add mac address that can connect to access point
+* Mac address change interval
+* Time to next change
+* Stop rotation (stay on current address / ssid)
+* add handlebars for templating
 
 #Random stuff
 
