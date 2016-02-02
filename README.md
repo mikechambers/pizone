@@ -11,7 +11,9 @@ pizone creates a Nintendo Zone access point that has the capability of spoofing 
 
 Note, this project is not being actively developed (although I am working to improve the documentation).
 
-![Alt text](screenshots/1_status.png?raw=true =250x)
+<img src="screenshots/1_status.png?raw=true" height="400" />
+
+You can view additional screenshots [here](https://github.com/mikechambers/pizone/tree/master/screenshots).
 
 # Setup
 
