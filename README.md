@@ -7,9 +7,11 @@ Create by Mike Chambers (mikechambers@gmail.com)
 
 [https://github.com/mikechambers/pizone](https://github.com/mikechambers/pizone)
 
-pizone creates a Ninendo Zone access point that has the cabilitiy of spoofing known access points around the world, allowing you to unlock location specific items, or make Street Pass contacts with people around the world.
+pizone creates a Nintendo Zone access point that has the capability of spoofing known access points around the world, allowing you to unlock location specific items, or make Street Pass contacts with people around the world.
 
 Note, this project is not being actively developed (although I am working to improve the documentation).
+
+![Alt text](screenshots/1_status.png?raw=true =250x)
 
 # Setup
 
@@ -79,7 +81,7 @@ Follow the directions at:
 
 [http://elinux.org/RPI-Wireless-Hotspot](http://elinux.org/RPI-Wireless-Hotspot)
 
-in order to configure your raspberry pi to act as a wireless access point. We will tweak some of the configurations, but before you move on, you should make sure that the raspberry pi is working as an access point, and you are able to connect to it, and get online through it.
+in order to configure your raspberry pi to act as a wireless access point. We will tweak some of the configurations, but before you move on, you should make sure that the raspberry pi is working as an access point, and you are able to connect to it, and get on-line through it.
 
 Note, pizone will automatically change the SSID, with the most common one being "attwifi".
 
@@ -111,7 +113,7 @@ Note, you only need to update this again if you want to give your Raspberry Pi a
 
 	up iptables-restore < /etc/iptables.ipv4.nat
 
-I also bound the PI's ethernet MAC address to the ip address on my router.
+I also bound the PI's Ethernet MAC address to the ip address on my router.
 
 ### Bonjour
 
@@ -213,7 +215,7 @@ The default install assumes pizone is found in:
 sudo /etc/init.d/pizoned start
 ```
 
-4. Load configuration page. Once pizone is running, it will make a configuration site avaiable at the IP address that the Raspberry PI is connected on. Just load that IP in your browser, you should see the current status. The default admin username / password is pizone / pizone. You can change this in pizone/bin/node/config.js.
+4. Load configuration page. Once pizone is running, it will make a configuration site available at the IP address that the Raspberry PI is connected on. Just load that IP in your browser, you should see the current status. The default admin username / password is pizone / pizone. You can change this in pizone/bin/node/config.js.
 
 5. Turn on 3DS, and assuming that you have configured your access point correctly, it should begin to make street pass connections. By default, it will change its Street Pass address every 10 minutes.
 
