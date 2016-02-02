@@ -9,11 +9,18 @@ Create by Mike Chambers (mikechambers@gmail.com)
 
 pizone creates a Nintendo Zone access point that has the capability of spoofing known access points around the world, allowing you to unlock location specific items, or make Street Pass contacts with people around the world.
 
+Features:
+
+* Creates a portable Nintendo Zone access point
+* Can loop through known Nintendo Zone access points to allow you to make Street Pass contacts from around the world (list can be customized).
+* Web based interface to monitor status, and tweak some settings
+
 Note, this project is not being actively developed (although I am working to improve the documentation).
 
 <img src="screenshots/1_status.png?raw=true" width="250" />
 
 You can view additional screenshots [here](https://github.com/mikechambers/pizone/tree/master/screenshots).
+
 
 # Setup
 
