@@ -11,7 +11,7 @@ pizone creates a Nintendo Zone access point that has the capability of spoofing 
 
 Note, this project is not being actively developed (although I am working to improve the documentation).
 
-<img src="screenshots/1_status.png?raw=true" width="250" /><img src="screenshots/2_access.png?raw=true" width="250" /><img src="screenshots/3_logs.png?raw=true" width="250" />
+<img src="screenshots/1_status.png?raw=true" width="250" />
 
 You can view additional screenshots [here](https://github.com/mikechambers/pizone/tree/master/screenshots).
 
@@ -29,10 +29,10 @@ You can find more detail info below, but the docs and instructions still need a 
 
 Below is the hardware that I bought to set this up (and which has been tested with the current code). Note, the links below are affiliate links (so I get a small amount when you purchase from them). If you don’t want to support the project, then just remove the affiliate ID in the URL.
 
-* [Raspberry Pi Model B](http://www.amazon.com/gp/product/B009SQQF9C/ref=as_li_ss_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=B009SQQF9C&linkCode=as2&tag=markmecom-20)
-* [SD Memory Card](ttp://www.amazon.com/gp/product/B007JRB0RY/ref=as_li_ss_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=B007JRB0RY&linkCode=as2&tag=markmecom-20) (4 gigs to be safe)
-* [UBS Wifi](http://www.amazon.com/gp/product/B007BWFXYS/ref=ox_ya_os_product)
-* [Case](http://www.amazon.com/gp/product/B00EDO46U4/ref=as_li_ss_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=B00EDO46U4&linkCode=as2&tag=markmecom-20)
+* [Raspberry Pi Model B](http://amzn.to/1JUg2Wq)
+* [SD Memory Card](http://amzn.to/1JUg8NP) (4 gigs to be safe)
+* [UBS Wifi](http://amzn.to/1QDgace)
+* [Case](http://amzn.to/1QDgZSv)
 
 Note, I am using a USB Wifi Adapter (linked above) that uses Ralink RT5370 chipset which worked for me without having to install any additional drivers. However, these adapters are pretty cheap in general, and even if you buy two from the same place, you may get different chipsets and thus different results.
 
@@ -77,13 +77,13 @@ Note, for reference, you can find info on how to set the hostname outside of `ra
 
 ## Configure Access Point
 
-At this point, you should be able to boot into the raspberry pi and SSH in (hint, when the raspberry pi boots up, it prints its IP to the screen. More info below on how to configure the IP).
+At this point, you should be able to boot into the raspberry pi and SSH in (hint, when the raspberry pi boots up, it prints it's IP to the screen. More info below on how to configure the IP).
 
 Follow the directions at:
 
 [http://elinux.org/RPI-Wireless-Hotspot](http://elinux.org/RPI-Wireless-Hotspot)
 
-in order to configure your raspberry pi to act as a wireless access point. We will tweak some of the configurations, but before you move on, you should make sure that the raspberry pi is working as an access point, and you are able to connect to it, and get on-line through it.
+in order to configure your raspberry pi to act as a Nintendo Zone access point. We will tweak some of the configurations, but before you move on, you should make sure that the raspberry pi is working as an access point, and you are able to connect to it, and get on-line through it.
 
 Note, pizone will automatically change the SSID, with the most common one being "attwifi".
 
@@ -194,7 +194,7 @@ This should output the version number:
 
 ### Install pizone
 
-1. Clone pizone
+1. Clone pizone from github (or download zip from the project page)
 
 ```git clone https://github.com/mikechambers/pizone.git```
 
