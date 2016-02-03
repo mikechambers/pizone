@@ -201,13 +201,16 @@ This should output the version number:
 
 ### Install pizone
 
-1. Clone pizone from github (or download zip from the project page)
+#### Step 1
+Clone pizone from github (or download zip from the project page)
 
 ```git clone https://github.com/mikechambers/pizone.git```
 
 The default install assumes pizone is found in: `/home/pi/pizone`
 
-2. Create symlinks
+#### Step 2
+
+Create symlinks
 
 ```
 sudo ln -s /home/pi/pizone/etc/pizone /etc/pizone
@@ -216,15 +219,20 @@ sudo ln -s /home/pi/pizone/bin/pizone /usr/local/bin/pizone
 sudo ln -s /home/pi/pizone/etc/init.d/pizoned /etc/init.d/pizoned
 ```
 
-3. Start pizone
+#### Step 3
+Start pizone
 
 ```
 sudo /etc/init.d/pizoned start
 ```
 
-4. Load configuration page. Once pizone is running, it will make a configuration site available at the IP address that the Raspberry PI is connected on. Just load that IP in your browser, you should see the current status. The default admin username / password is pizone / pizone. You can change this in pizone/bin/node/config.js.
+#### Step 4
 
-5. Turn on 3DS, and assuming that you have configured your access point correctly, it should begin to make street pass connections. By default, it will change its Street Pass address every 10 minutes.
+Load configuration page. Once pizone is running, it will make a configuration site available at the IP address that the Raspberry PI is connected on. Just load that IP in your browser, you should see the current status. The default admin username / password is pizone / pizone. You can change this in pizone/bin/node/config.js.
+
+#### Step 5
+
+Turn on 3DS, and assuming that you have configured your access point correctly, it should begin to make street pass connections. By default, it will change its Street Pass address every 10 minutes.
 
 ## Configuration
 
