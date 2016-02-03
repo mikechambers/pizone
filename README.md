@@ -205,17 +205,15 @@ This should output the version number:
 
 ```git clone https://github.com/mikechambers/pizone.git```
 
-The default install assumes pizone is found in:
-
-```/home/pi/pizone```
+The default install assumes pizone is found in: `/home/pi/pizone`
 
 2. Create symlinks
 
 ```
-    sudo ln -s /home/pi/pizone/etc/pizone /etc/pizone
-    sudo ln -s /home/pi/pizone/bin/cmac /usr/local/bin/cmac
-    sudo ln -s /home/pi/pizone/bin/pizone /usr/local/bin/pizone
-    sudo ln -s /home/pi/pizone/etc/init.d/pizoned /etc/init.d/pizoned
+sudo ln -s /home/pi/pizone/etc/pizone /etc/pizone
+sudo ln -s /home/pi/pizone/bin/cmac /usr/local/bin/cmac
+sudo ln -s /home/pi/pizone/bin/pizone /usr/local/bin/pizone
+sudo ln -s /home/pi/pizone/etc/init.d/pizoned /etc/init.d/pizoned
 ```
 
 3. Start pizone
@@ -236,15 +234,15 @@ sudo /etc/init.d/pizoned start
 
 In order to have pizone automatically run when the Raspberry Pi boots up, run the following command:
 
-    sudo update-rc.d pizoned defaults
+ ```sudo update-rc.d pizoned defaults```
 
 Any errors or output from the service will be written to a log file at:
 
-    /var/log/pizone
+```/var/log/pizone```
 
 You can watch the logs in real time by running:
 
-    tail - f /var/log/pizone
+```tail - f /var/log/pizone```
 
 Note, the log is cleared each time the pizone service is run at boot.
 
@@ -254,15 +252,16 @@ Note, the log is cleared each time the pizone service is run at boot.
 
 If you are seeing the following in the pizone log files:
 
-    SIOCSIFHWADDR: Device or resource busy - you may need to down the interface
+```SIOCSIFHWADDR: Device or resource busy - you may need to down the interface```
 
 you may need to adjust the *ifplugd* daemon to not automatically load the *wlan0* interface.
 
 You can do this by opening the */etc/default/ifplugd* file and editing the two properties below:
 
-    INTERFACES="eth0"
-    HOTPLUG_INTERFACES="eth0"
-
+```
+INTERFACES="eth0"
+HOTPLUG_INTERFACES="eth0"
+```
 
 Note, that once you make this change, you cannot hot swap the USB WiFi adapter, so make sure that it is plugged in when the Pi is booted up.
 
