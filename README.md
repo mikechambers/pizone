@@ -38,7 +38,7 @@ Below is the hardware that I bought to set this up (and which has been tested wi
 
 * [Raspberry Pi Model B](http://amzn.to/1JUg2Wq)
 * [SD Memory Card](http://amzn.to/1JUg8NP) (4 gigs to be safe)
-* [UBS Wifi](http://amzn.to/1QDgace)
+* [USB Wifi](http://amzn.to/1QDgace)
 * [Case](http://amzn.to/1QDgZSv)
 
 Note, I am using a USB Wifi Adapter (linked above) that uses Ralink RT5370 chipset which worked for me without having to install any additional drivers. However, these adapters are pretty cheap in general, and even if you buy two from the same place, you may get different chipsets and thus different results.
