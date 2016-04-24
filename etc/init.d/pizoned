@@ -46,6 +46,10 @@ start)
 	fi
 
 	nohup /usr/local/bin/node "$PIZONE_PATH" > "$LOG_FILE" &
+
+	#redirect above to null
+	#see if pizone is running. if so, echo message it is running, otherwise
+	#echo error message and point to log file
 ;;
 stop)
 	sudo pkill -9 -f "$PIZONE_PATH"
